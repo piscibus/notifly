@@ -34,24 +34,9 @@ class TestCase extends Orchestra
             'prefix' => '',
         ]);
 
-        $this->migrations();
-    }
-
-    private function migrations(): void
-    {
-        $this->publishedMigrations();
-
-        $this->testingMigrations();
-    }
-
-    private function publishedMigrations(): void
-    {
         include_once __DIR__ . '/../database/migrations/create_notifly_table.php.stub';
         (new CreateNotiflyTable())->up();
-    }
 
-    private function testingMigrations(): void
-    {
         include_once __DIR__ . '/database/migrations/CreateUserTable.php';
         include_once __DIR__ . '/database/migrations/CreateExampleObjectTable.php';
         include_once __DIR__ . '/database/migrations/CreateExampleTargetTable.php';
