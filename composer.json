@@ -1,59 +1,59 @@
 {
-    "name": "spatie/notifly",
-    "description": "Yeat another notifications package for laravel",
-    "keywords": [
-        "spatie",
-        "notifly"
-    ],
-    "homepage": "https://github.com/spatie/notifly",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "imdhemy",
-            "email": "imdhemy@gmail.com",
-            "homepage": "http://dhemy.studio",
-            "role": "Developer"
-        }
-    ],
-    "require": {
-        "php": "^7.2.5"
-    },
-    "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.16",
-        "orchestra/testbench": "^5.0",
-        "phpunit/phpunit": "^8.5",
-        "psalm/plugin-laravel": "^1.2",
-        "vimeo/psalm": "^3.11"
-    },
-    "autoload": {
-        "psr-4": {
-            "Piscibus\\Notifly\\": "src"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Piscibus\\Notifly\\Tests\\": "tests"
-        }
-    },
-    "scripts": {
-        "psalm": "vendor/bin/psalm",
-        "test": "vendor/bin/phpunit",
-        "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
-        "format": "vendor/bin/php-cs-fixer fix --allow-risky=yes"
-    },
-    "config": {
-        "sort-packages": true
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Piscibus\\Notifly\\NotiflyServiceProvider"
-            ],
-            "aliases": {
-                "Notifly": "Piscibus\\Notifly\\NotiflyFacade"
-            }
-        }
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+  "name": "piscibus/notifly",
+  "description": "Yet another notifications package for laravel",
+  "keywords": [
+    "piscibus",
+    "notifly"
+  ],
+  "homepage": "https://github.com/piscibus/notifly",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "imdhemy",
+      "email": "imdhemy@gmail.com",
+      "homepage": "http://dhemy.studio",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": "^7.2.5"
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^2.16",
+    "orchestra/testbench": "^5.0",
+    "phpunit/phpunit": "^8.5",
+    "psalm/plugin-laravel": "^1.2",
+    "vimeo/psalm": "^3.11"
+  },
+  "autoload": {
+    "psr-4": {
+      "Piscibus\\Notifly\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Piscibus\\Notifly\\Tests\\": "tests"
+    }
+  },
+  "scripts": {
+    "psalm": "vendor/bin/psalm",
+    "test": "vendor/bin/phpunit",
+    "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
+    "format": "vendor/bin/php-cs-fixer fix --allow-risky=yes"
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Piscibus\\Notifly\\NotiflyServiceProvider"
+      ],
+      "aliases": {
+        "Notifly": "Piscibus\\Notifly\\NotiflyFacade"
+      }
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
 }
