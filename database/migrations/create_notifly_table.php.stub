@@ -4,16 +4,34 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateNotiflyTable
+ */
 class CreateNotiflyTable extends Migration
 {
+    /**
+     * Run the migrations
+     */
     public function up()
     {
-        Schema::create('notifly_table', function (Blueprint $table) {
-            $table->bigIncrements('id');
-
-            // add fields
-
+        Schema::create('notifly', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('verb');
+            $table->nullableUuidMorphs('actor');
+            $table->nullableUuidMorphs('object');
+            $table->nullableUuidMorphs('target');
+            $table->uuidMorphs('notifly');
             $table->timestamps();
+            $table->timestamp('seen_at')->nullable();
+            $table->timestamp('read_at')->nullable();
         });
+    }
+
+    /**
+     * Rollback the migrations
+     */
+    public function down()
+    {
+        Schema::dropIfExists('notifly');
     }
 }
