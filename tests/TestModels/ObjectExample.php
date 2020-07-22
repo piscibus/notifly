@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Piscibus\Notifly\Tests\Channels;
+namespace Piscibus\Notifly\Tests\TestModels;
 
 use Illuminate\Database\Eloquent\Model;
 use Piscibus\Notifly\Contracts\ObjectAble as ObjectAbleContract;

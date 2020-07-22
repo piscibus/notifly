@@ -1,6 +1,6 @@
 <?php
 
-namespace Piscibus\Notifly\Tests\Channels;
+namespace Piscibus\Notifly\Tests\TestModels;
 
 use Piscibus\Notifly\Tests\TestCase;
 

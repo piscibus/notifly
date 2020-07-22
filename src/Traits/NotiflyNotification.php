@@ -21,15 +21,6 @@ trait NotiflyNotification
         return $this->verb;
     }
 
-
-    /**
-     * @return string|null
-     */
-    public function getTargetId(): ?string
-    {
-        return null;
-    }
-
     /**
      * @return ActorAble
      */
@@ -51,6 +42,6 @@ trait NotiflyNotification
      */
     public function getTarget(): TargetAble
     {
-        return $this->taget;
+        return $this->target;
     }
 }

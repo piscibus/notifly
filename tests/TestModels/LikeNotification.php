@@ -1,19 +1,27 @@
 <?php
 
 
-namespace Piscibus\Notifly\Tests\Channels;
+namespace Piscibus\Notifly\Tests\TestModels;
 
 use Illuminate\Notifications\Notification;
 use Piscibus\Notifly\Channels\NotiflyChannel;
 use Piscibus\Notifly\Contracts\ActorAble;
-use Piscibus\Notifly\Contracts\NotiflyNotification as NotiflyNotificationContract;
+use Piscibus\Notifly\Contracts\NotiflyNotification;
 use Piscibus\Notifly\Contracts\ObjectAble;
 use Piscibus\Notifly\Contracts\TargetAble;
-use Piscibus\Notifly\Traits\NotiflyNotification;
 
-class NotificationExample extends Notification implements NotiflyNotificationContract
+/**
+ * Class LikeNotification
+ * @package Piscibus\Notifly\Tests\TestModels
+ */
+class LikeNotification extends Notification implements NotiflyNotification
 {
-    use NotiflyNotification;
+    use \Piscibus\Notifly\Traits\NotiflyNotification;
+
+    /**
+     * @var string
+     */
+    private $verb = 'like';
 
     /**
      * @var ActorAble
@@ -28,15 +36,10 @@ class NotificationExample extends Notification implements NotiflyNotificationCon
     /**
      * @var TargetAble
      */
-    private $taget;
+    private $target;
 
     /**
-     * @var string
-     */
-    private $verb = 'my_verb';
-
-    /**
-     * NotificationExample constructor.
+     * LikeNotification constructor.
      * @param ActorAble $actor
      * @param ObjectAble $object
      * @param TargetAble $target
@@ -45,7 +48,7 @@ class NotificationExample extends Notification implements NotiflyNotificationCon
     {
         $this->actor = $actor;
         $this->object = $object;
-        $this->taget = $target;
+        $this->target = $target;
     }
 
     /**
