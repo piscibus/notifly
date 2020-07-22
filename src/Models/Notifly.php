@@ -3,6 +3,7 @@
 
 namespace Piscibus\Notifly\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Piscibus\Notifly\Contracts\NotiflyAble;
@@ -20,6 +21,8 @@ use Piscibus\Notifly\Contracts\NotiflyNotification;
  * @property string notifly_id
  * @property string target_type
  * @property string target_id
+ * @property Carbon read_at
+ * @property Carbon seen_at
  *
  * @package Piscibus\Notifly\Models
  * @method static self create(array $attributes)
@@ -98,5 +101,58 @@ class Notifly extends Model
     public function getId(): string
     {
         return $this->id;
+    }
+
+    /**
+     * Mark the notification as read.
+     *
+     * @return void
+     */
+    public function markAsRead()
+    {
+        if (is_null($this->read_at)) {
+            $time = $this->freshTimestamp();
+            $attributes = [
+                'read_at' => $time,
+                'seen_at' => $time,
+            ];
+            $this->forceFill($attributes)->save();
+        }
+    }
+
+    /**
+     * Mark the notification as unread.
+     *
+     * @return void
+     */
+    public function markAsUnread()
+    {
+        if (! is_null($this->read_at)) {
+            $this->forceFill(['read_at' => null])->save();
+        }
+    }
+
+    /**
+     * Mark the notification as seen.
+     *
+     * @return void
+     */
+    public function markAsSeen()
+    {
+        if (is_null($this->seen_at)) {
+            $this->forceFill(['seen_at' => $this->freshTimestamp()])->save();
+        }
+    }
+
+    /**
+     * Mark the notification as unseen.
+     *
+     * @return void
+     */
+    public function markAsUnseen()
+    {
+        if (! is_null($this->seen_at)) {
+            $this->forceFill(['seen_at' => null])->save();
+        }
     }
 }
