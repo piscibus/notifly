@@ -35,7 +35,6 @@ class TestCase extends Orchestra
         ]);
 
         $this->migrations();
-
     }
 
     private function migrations(): void

@@ -11,6 +11,7 @@ trait ObjectAble
     public function getObjectId()
     {
         $key = $this->getKeyName();
+
         return $this->$key;
     }
 }

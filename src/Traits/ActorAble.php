@@ -11,6 +11,7 @@ trait ActorAble
     public function getActorId()
     {
         $key = $this->getKeyName();
+
         return $this->$key;
     }
 }
