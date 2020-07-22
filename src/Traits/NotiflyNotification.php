@@ -5,6 +5,7 @@ namespace Piscibus\Notifly\Traits;
 
 use Piscibus\Notifly\Contracts\ActorAble;
 use Piscibus\Notifly\Contracts\ObjectAble;
+use Piscibus\Notifly\Contracts\TargetAble;
 
 /**
  * Trait NotiflyNotification
@@ -20,13 +21,6 @@ trait NotiflyNotification
         return $this->verb;
     }
 
-    /**
-     * @return string
-     */
-    public function getTargetType(): string
-    {
-        return $this->targetType;
-    }
 
     /**
      * @return string|null
@@ -50,5 +44,13 @@ trait NotiflyNotification
     public function getObject(): ObjectAble
     {
         return $this->object;
+    }
+
+    /**
+     * @return TargetAble
+     */
+    public function getTarget(): TargetAble
+    {
+        return $this->taget;
     }
 }

@@ -15,7 +15,9 @@ class NotiflyChannelTest extends TestCase
         $user = factory(User::class)->create();
         $actor = factory(User::class)->create();
         $object = factory(ObjectExample::class)->create();
-        $notification = new NotificationExample($actor, $object);
+        $target = factory(TargetExample::class)->create();
+
+        $notification = new NotificationExample($actor, $object, $target);
 
         // When
         $user->notify($notification);

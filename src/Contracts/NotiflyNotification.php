@@ -15,7 +15,5 @@ interface NotiflyNotification
 
     public function getObject(): ObjectAble;
 
-    public function getTargetType(): string;
-
-    public function getTargetId(): ?string;
+    public function getTarget(): TargetAble;
 }

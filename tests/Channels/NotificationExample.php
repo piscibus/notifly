@@ -8,6 +8,7 @@ use Piscibus\Notifly\Channels\NotiflyChannel;
 use Piscibus\Notifly\Contracts\ActorAble;
 use Piscibus\Notifly\Contracts\NotiflyNotification as NotiflyNotificationContract;
 use Piscibus\Notifly\Contracts\ObjectAble;
+use Piscibus\Notifly\Contracts\TargetAble;
 use Piscibus\Notifly\Traits\NotiflyNotification;
 
 class NotificationExample extends Notification implements NotiflyNotificationContract
@@ -25,24 +26,26 @@ class NotificationExample extends Notification implements NotiflyNotificationCon
     private $object;
 
     /**
+     * @var TargetAble
+     */
+    private $taget;
+
+    /**
      * @var string
      */
     private $verb = 'my_verb';
 
     /**
-     * @var string
-     */
-    private $targetType = TargetExample::class;
-
-    /**
      * NotificationExample constructor.
      * @param ActorAble $actor
      * @param ObjectAble $object
+     * @param TargetAble $target
      */
-    public function __construct(ActorAble $actor, ObjectAble $object)
+    public function __construct(ActorAble $actor, ObjectAble $object, TargetAble $target)
     {
         $this->actor = $actor;
         $this->object = $object;
+        $this->taget = $target;
     }
 
     /**
