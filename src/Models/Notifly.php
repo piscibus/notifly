@@ -74,6 +74,7 @@ class Notifly extends Model
         $item->notifly_id = $notiflyAble->getNotiflyId();
         $item->target_type = get_class($notification->getTarget());
         $item->target_id = $notification->getTarget()->getTargetId();
+
         return $item;
     }
 
