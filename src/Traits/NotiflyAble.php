@@ -3,11 +3,11 @@
 
 namespace Piscibus\Notifly\Traits;
 
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Notifications\RoutesNotifications;
 
 trait NotiflyAble
 {
-    use Notifiable;
+    use HasDatabaseNotifications, RoutesNotifications;
 
     /**
      * @inheritDoc
