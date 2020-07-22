@@ -18,7 +18,7 @@ class NotiflyTest extends TestCase
      */
     public function test_it_has_a_uuid_primary_key()
     {
-        $attributes = ['verb' => 'foo'];
+        $attributes = ['verb' => 'foo', 'notifly_type' => '', 'notifly_id' => 0];
         $notification = Notifly::create($attributes);
         $uuid = Uuid::fromString($notification->getId());
         $this->assertInstanceOf(UuidInterface::class, $uuid);
