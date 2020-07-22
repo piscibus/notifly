@@ -52,5 +52,4 @@ class NotificationExample extends Notification implements NotiflyNotificationCon
     {
         return [NotiflyChannel::class];
     }
-
 }

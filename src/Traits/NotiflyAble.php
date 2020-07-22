@@ -15,6 +15,7 @@ trait NotiflyAble
     public function getNotiflyId()
     {
         $key = $this->getKeyName();
+
         return $this->$key;
     }
 }
