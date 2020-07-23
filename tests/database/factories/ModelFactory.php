@@ -15,7 +15,26 @@ $factory->define(User::class, function (Generator $faker) {
 });
 
 $factory->define(Notifly::class, function (Generator $faker) {
-    return [];
+    /** @var User $notifly */
+    $notifly = factory(User::class)->create();
+    /** @var User $actor */
+    $actor = factory(User::class)->create();
+    /** @var TargetExample $target */
+    $target = factory(TargetExample::class)->create();
+    /** @var ObjectExample $object */
+    $object = factory(ObjectExample::class)->create();
+
+    return [
+        'notifly_type' => $notifly->getType(),
+        'notifly_id' => $notifly->getId(),
+        'actor_type' => $actor->getType(),
+        'actor_id' => $actor->getId(),
+        'target_type' => $target->getType(),
+        'target_id' => $target->getId(),
+        'object_type' => $object->getType(),
+        'object_id' => $object->getId(),
+        'verb' => $faker->colorName,
+    ];
 });
 
 $factory->define(ObjectExample::class, function (Generator $faker) {

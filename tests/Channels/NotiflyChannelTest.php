@@ -12,9 +12,13 @@ class NotiflyChannelTest extends TestCase
     public function test_send()
     {
         // Given
+        /** @var User $user */
         $user = factory(User::class)->create();
+        /** @var User $actor */
         $actor = factory(User::class)->create();
+        /** @var ObjectExample $object */
         $object = factory(ObjectExample::class)->create();
+        /** @var TargetExample $target */
         $target = factory(TargetExample::class)->create();
 
         $notification = new NotificationExample($actor, $object, $target);
@@ -24,9 +28,9 @@ class NotiflyChannelTest extends TestCase
 
         // Then
         $this->assertDatabaseHas('notifly', [
-            'notifly_type' => get_class($user),
-            'notifly_id' => $user->id,
             'verb' => $notification->getVerb(),
+            'notifly_type' => $user->getType(),
+            'notifly_id' => $user->getId(),
         ]);
     }
 }

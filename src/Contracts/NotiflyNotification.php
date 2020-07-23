@@ -11,9 +11,9 @@ interface NotiflyNotification
 {
     public function getVerb(): string;
 
-    public function getActor(): ActorAble;
+    public function getActor(): MorphAble;
 
-    public function getObject(): ObjectAble;
+    public function getObject(): MorphAble;
 
-    public function getTarget(): TargetAble;
+    public function getTarget(): MorphAble;
 }

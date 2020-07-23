@@ -6,7 +6,7 @@ namespace Piscibus\Notifly\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
-use Piscibus\Notifly\Contracts\NotiflyAble;
+use Piscibus\Notifly\Contracts\MorphAble;
 use Piscibus\Notifly\Contracts\NotiflyNotification;
 
 /**
@@ -23,6 +23,9 @@ use Piscibus\Notifly\Contracts\NotiflyNotification;
  * @property string target_id
  * @property Carbon read_at
  * @property Carbon seen_at
+ * @property MorphAble actor
+ * @property MorphAble object
+ * @property MorphAble target
  *
  * @package Piscibus\Notifly\Models
  * @method static self create(array $attributes)
@@ -60,23 +63,23 @@ class Notifly extends Model
     ];
 
     /**
-     * @param NotiflyAble $notiflyAble
+     * @param MorphAble $notiflyAble
      * @param NotiflyNotification $notification
      * @return static
      */
-    public static function init(NotiflyAble $notiflyAble, NotiflyNotification $notification): self
+    public static function init(MorphAble $notiflyAble, NotiflyNotification $notification): self
     {
-        $actor = $notification->getActor();
         $item = new self();
+
         $item->verb = $notification->getVerb();
-        $item->actor_type = get_class($actor);
-        $item->actor_id = $notification->getActor()->getActorId();
-        $item->object_type = get_class($notification->getObject());
-        $item->object_id = $notification->getObject()->getObjectId();
-        $item->notifly_type = get_class($notiflyAble);
-        $item->notifly_id = $notiflyAble->getNotiflyId();
-        $item->target_type = get_class($notification->getTarget());
-        $item->target_id = $notification->getTarget()->getTargetId();
+        $item->actor_type = $notification->getActor()->getType();
+        $item->actor_id = $notification->getActor()->getId();
+        $item->object_type = $notification->getObject()->getType();
+        $item->object_id = $notification->getObject()->getId();
+        $item->target_type = $notification->getTarget()->getType();
+        $item->target_id = $notification->getTarget()->getId();
+        $item->notifly_type = $notiflyAble->getType();
+        $item->notifly_id = $notiflyAble->getId();
 
         return $item;
     }
@@ -154,5 +157,40 @@ class Notifly extends Model
         if (! is_null($this->seen_at)) {
             $this->forceFill(['seen_at' => null])->save();
         }
+    }
+
+    public function actor()
+    {
+        return $this->MorphTo();
+    }
+
+    public function object()
+    {
+        return $this->MorphTo();
+    }
+
+    public function target()
+    {
+        return $this->MorphTo();
+    }
+
+    public function getVerb(): string
+    {
+        return $this->verb;
+    }
+
+    public function getActor(): MorphAble
+    {
+        return $this->actor;
+    }
+
+    public function getObject(): MorphAble
+    {
+        return $this->object;
+    }
+
+    public function getTarget(): MorphAble
+    {
+        return $this->target;
     }
 }

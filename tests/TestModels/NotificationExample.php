@@ -5,10 +5,8 @@ namespace Piscibus\Notifly\Tests\TestModels;
 
 use Illuminate\Notifications\Notification;
 use Piscibus\Notifly\Channels\NotiflyChannel;
-use Piscibus\Notifly\Contracts\ActorAble;
+use Piscibus\Notifly\Contracts\MorphAble;
 use Piscibus\Notifly\Contracts\NotiflyNotification as NotiflyNotificationContract;
-use Piscibus\Notifly\Contracts\ObjectAble;
-use Piscibus\Notifly\Contracts\TargetAble;
 use Piscibus\Notifly\Traits\NotiflyNotification;
 
 class NotificationExample extends Notification implements NotiflyNotificationContract
@@ -16,17 +14,17 @@ class NotificationExample extends Notification implements NotiflyNotificationCon
     use NotiflyNotification;
 
     /**
-     * @var ActorAble
+     * @var MorphAble
      */
     private $actor;
 
     /**
-     * @var ObjectAble
+     * @var MorphAble
      */
     private $object;
 
     /**
-     * @var TargetAble
+     * @var MorphAble
      */
     private $target;
 
@@ -37,11 +35,11 @@ class NotificationExample extends Notification implements NotiflyNotificationCon
 
     /**
      * NotificationExample constructor.
-     * @param ActorAble $actor
-     * @param ObjectAble $object
-     * @param TargetAble $target
+     * @param MorphAble $actor
+     * @param MorphAble $object
+     * @param MorphAble $target
      */
-    public function __construct(ActorAble $actor, ObjectAble $object, TargetAble $target)
+    public function __construct(MorphAble $actor, MorphAble $object, MorphAble $target)
     {
         $this->actor = $actor;
         $this->object = $object;

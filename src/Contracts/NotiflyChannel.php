@@ -10,9 +10,9 @@ namespace Piscibus\Notifly\Contracts;
 interface NotiflyChannel
 {
     /**
-     * @param NotiflyAble $notiflyAble
+     * @param MorphAble $notiflyAble
      * @param NotiflyNotification $notification
      * @return void
      */
-    public function send(NotiflyAble $notiflyAble, NotiflyNotification $notification): void;
+    public function send(MorphAble $notiflyAble, NotiflyNotification $notification): void;
 }

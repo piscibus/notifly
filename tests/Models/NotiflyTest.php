@@ -2,6 +2,7 @@
 
 namespace Piscibus\Notifly\Tests\Models;
 
+use Illuminate\Support\Collection;
 use Piscibus\Notifly\Models\Notifly;
 use Piscibus\Notifly\Tests\TestCase;
 use Piscibus\Notifly\Tests\TestModels\User;
@@ -19,8 +20,7 @@ class NotiflyTest extends TestCase
      */
     public function test_it_has_a_uuid_primary_key()
     {
-        $attributes = ['verb' => 'foo', 'notifly_type' => '', 'notifly_id' => 0];
-        $notification = Notifly::create($attributes);
+        $notification = factory(Notifly::class)->create();
         $uuid = Uuid::fromString($notification->getId());
         $this->assertInstanceOf(UuidInterface::class, $uuid);
     }
@@ -30,10 +30,11 @@ class NotiflyTest extends TestCase
      */
     public function test_notiflyable_can_access_notifications()
     {
+        /** @var User $user */
         $user = factory(User::class)->create();
-        $notifications = $user->notifications()->createMany(
-            factory(Notifly::class, rand(1, 10))->make(['verb' => 'foo'])->toArray()
-        );
+        $notifications = factory(Notifly::class, rand(1, 10))->make()->toArray();
+        /** @var Collection $notifications */
+        $notifications = $user->notifications()->createMany($notifications);
         $this->assertEquals($notifications->count(), $user->notifications->count());
     }
 
@@ -43,12 +44,11 @@ class NotiflyTest extends TestCase
     public function test_notiflyable_can_get_read_notifications()
     {
         $user = factory(User::class)->create();
-        $readNotifications = $user->notifications()->createMany(
-            factory(Notifly::class, rand(1, 10))->make(['verb' => 'foo', 'read_at' => now()])->toArray()
-        );
-        $user->notifications()->createMany(
-            factory(Notifly::class, rand(1, 10))->make(['verb' => 'foo'])->toArray()
-        );
+        $notifications = factory(Notifly::class, rand(1, 10))->make(['read_at' => now()])->toArray();
+        /** @var Collection $readNotifications */
+        $readNotifications = $user->notifications()->createMany($notifications);
+        $notifications = factory(Notifly::class, rand(1, 10))->make()->toArray();
+        $user->notifications()->createMany($notifications);
         $this->assertEquals($readNotifications->count(), $user->readNotifications()->count());
     }
 
@@ -58,12 +58,11 @@ class NotiflyTest extends TestCase
     public function test_notiflyable_can_get_unread_notifications()
     {
         $user = factory(User::class)->create();
-        $user->notifications()->createMany(
-            factory(Notifly::class, rand(1, 10))->make(['verb' => 'foo', 'read_at' => now()])->toArray()
-        );
-        $unreadNotifications = $user->notifications()->createMany(
-            factory(Notifly::class, rand(1, 10))->make(['verb' => 'foo'])->toArray()
-        );
+        $notifications = factory(Notifly::class, rand(1, 10))->make(['read_at' => now()])->toArray();
+        $user->notifications()->createMany($notifications);
+        $notifications = factory(Notifly::class, rand(1, 10))->make()->toArray();
+        /** @var Collection $unreadNotifications */
+        $unreadNotifications = $user->notifications()->createMany($notifications);
         $this->assertEquals($unreadNotifications->count(), $user->unreadNotifications()->count());
     }
 
@@ -73,12 +72,10 @@ class NotiflyTest extends TestCase
     public function test_notiflyable_can_get_seen_notifications()
     {
         $user = factory(User::class)->create();
-        $seenNotifications = $user->notifications()->createMany(
-            factory(Notifly::class, rand(1, 10))->make(['verb' => 'foo', 'seen_at' => now()])->toArray()
-        );
-        $user->notifications()->createMany(
-            factory(Notifly::class, rand(1, 10))->make(['verb' => 'foo'])->toArray()
-        );
+        $notifications = factory(Notifly::class, rand(1, 10))->make(['seen_at' => now()])->toArray();
+        /** @var Collection $seenNotifications */
+        $seenNotifications = $user->notifications()->createMany($notifications);
+        $user->notifications()->createMany(factory(Notifly::class, rand(1, 10))->make()->toArray());
         $this->assertEquals($seenNotifications->count(), $user->seenNotifications()->count());
     }
 
@@ -88,12 +85,11 @@ class NotiflyTest extends TestCase
     public function test_notiflyable_can_get_unseen_notifications()
     {
         $user = factory(User::class)->create();
-        $user->notifications()->createMany(
-            factory(Notifly::class, rand(1, 10))->make(['verb' => 'foo', 'seen_at' => now()])->toArray()
-        );
-        $unseenNotifications = $user->notifications()->createMany(
-            factory(Notifly::class, rand(1, 10))->make(['verb' => 'foo'])->toArray()
-        );
+        $notifications = factory(Notifly::class, rand(1, 10))->make(['seen_at' => now()])->toArray();
+        $user->notifications()->createMany($notifications);
+        $notifications = factory(Notifly::class, rand(1, 10))->make()->toArray();
+        /** @var Collection $unseenNotifications */
+        $unseenNotifications = $user->notifications()->createMany($notifications);
         $this->assertEquals($unseenNotifications->count(), $user->unseenNotificiations()->count());
     }
 }

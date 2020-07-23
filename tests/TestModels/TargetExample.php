@@ -4,10 +4,9 @@
 namespace Piscibus\Notifly\Tests\TestModels;
 
 use Illuminate\Database\Eloquent\Model;
-use Piscibus\Notifly\Contracts\TargetAble as TargetAbleContract;
-use Piscibus\Notifly\Traits\TargetAble;
+use Piscibus\Notifly\Contracts\MorphAble;
 
-class TargetExample extends Model implements TargetAbleContract
+class TargetExample extends Model implements MorphAble
 {
-    use TargetAble;
+    use \Piscibus\Notifly\Traits\MorphAble;
 }

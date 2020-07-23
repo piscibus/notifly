@@ -3,9 +3,7 @@
 
 namespace Piscibus\Notifly\Traits;
 
-use Piscibus\Notifly\Contracts\ActorAble;
-use Piscibus\Notifly\Contracts\ObjectAble;
-use Piscibus\Notifly\Contracts\TargetAble;
+use Piscibus\Notifly\Contracts\MorphAble;
 
 /**
  * Trait NotiflyNotification
@@ -22,25 +20,25 @@ trait NotiflyNotification
     }
 
     /**
-     * @return ActorAble
+     * @return MorphAble
      */
-    public function getActor(): ActorAble
+    public function getActor(): MorphAble
     {
         return $this->actor;
     }
 
     /**
-     * @return ObjectAble
+     * @return MorphAble
      */
-    public function getObject(): ObjectAble
+    public function getObject(): MorphAble
     {
         return $this->object;
     }
 
     /**
-     * @return TargetAble
+     * @return MorphAble
      */
-    public function getTarget(): TargetAble
+    public function getTarget(): MorphAble
     {
         return $this->target;
     }
