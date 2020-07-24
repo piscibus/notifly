@@ -11,6 +11,7 @@ trait Morphable
     public function getId(): string
     {
         $key = $this->getKeyName();
+
         return $this->$key;
     }
 

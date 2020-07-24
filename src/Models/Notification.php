@@ -75,6 +75,7 @@ class Notification extends Model
     public function addActor(Transformable $actor): Model
     {
         $exists = $this->actors()->find($actor->getId());
+
         return $exists ? $this->updateActor($exists) : $this->attachActor($actor);
     }
 
@@ -95,6 +96,7 @@ class Notification extends Model
     {
         $exists->added_on = $this->freshTimestamp();
         $exists->save();
+
         return $exists;
     }
 
@@ -108,6 +110,7 @@ class Notification extends Model
             'actor_type' => $actor->getType(),
             'actor_id' => $actor->getId(),
         ];
+
         return $this->actors()->create($attributes);
     }
 }
