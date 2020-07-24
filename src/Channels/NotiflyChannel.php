@@ -3,23 +3,24 @@
 
 namespace Piscibus\Notifly\Channels;
 
-use Piscibus\Notifly\Contracts\MorphAble;
-use Piscibus\Notifly\Contracts\NotiflyChannel as ChannelContract;
-use Piscibus\Notifly\Contracts\NotiflyNotification;
-use Piscibus\Notifly\Models\Notifly;
+use Piscibus\Notifly\Contracts\Morphable as Notifiable;
+use Piscibus\Notifly\Contracts\NotiflyChannelContract;
+use Piscibus\Notifly\Contracts\NotiflyNotificationContract as Notification;
+use Piscibus\Notifly\Models\Notification as NotificationModel;
 
 /**
  * Class NotiflyChannel
  * @package Piscibus\Notifly\Channels
  */
-class NotiflyChannel implements ChannelContract
+class NotiflyChannel implements NotiflyChannelContract
 {
     /**
      * @inheritDoc
      */
-    public function send(MorphAble $notiflyAble, NotiflyNotification $notification): void
+    public function send(Notifiable $notifiable, Notification $notification): void
     {
-        $item = Notifly::init($notiflyAble, $notification);
+        $item = NotificationModel::init($notifiable, $notification);
         $item->save();
+        $item->addActor($notification->getActor());
     }
 }

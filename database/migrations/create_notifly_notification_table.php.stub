@@ -5,25 +5,23 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /**
- * Class CreateNotiflyTable
+ * Class CreateNotiflyNotificationTable
  */
-class CreateNotiflyTable extends Migration
+class CreateNotiflyNotificationTable extends Migration
 {
     /**
      * Run the migrations
      */
     public function up()
     {
-        Schema::create('notifly', function (Blueprint $table) {
+        Schema::create('notification', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->uuidMorphs('owner');
             $table->string('verb');
-            $table->nullableUuidMorphs('actor');
-            $table->nullableUuidMorphs('object');
-            $table->nullableUuidMorphs('target');
-            $table->uuidMorphs('notifly');
-            $table->timestamps();
+            $table->uuidMorphs('object');
+            $table->uuidMorphs('target');
+            $table->timestamp('created_at');
             $table->timestamp('seen_at')->nullable();
-            $table->timestamp('read_at')->nullable();
         });
     }
 
@@ -32,6 +30,6 @@ class CreateNotiflyTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('notifly');
+        Schema::dropIfExists('notification');
     }
 }

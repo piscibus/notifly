@@ -3,37 +3,64 @@
 namespace Piscibus\Notifly;
 
 use Illuminate\Support\ServiceProvider;
-use Piscibus\Notifly\Commands\NotiflyCommand;
 
 class NotiflyServiceProvider extends ServiceProvider
 {
     public function boot()
     {
         if ($this->app->runningInConsole()) {
-            $this->publishes([
-                __DIR__.'/../config/notifly.php' => config_path('notifly.php'),
-            ], 'config');
+            $this->publishConfigs();
 
-            $this->publishes([
-                __DIR__.'/../resources/views' => base_path('resources/views/vendor/notifly'),
-            ], 'views');
+            $this->publishViews();
 
-            if (! class_exists('CreatePackageTable')) {
-                $this->publishes([
-                    __DIR__ . '/../database/migrations/create_notifly_table.php.stub' => database_path('migrations/' . date('Y_m_d_His', time()) . '_create_notifly_table.php'),
-                ], 'migrations');
-            }
+            $this->publishMigrations();
 
-            $this->commands([
-                NotiflyCommand::class,
-            ]);
+            $this->bootCommands();
         }
 
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'notifly');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'notifly');
     }
 
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/notifly.php', 'notifly');
+        $this->mergeConfigFrom(__DIR__ . '/../config/notifly.php', 'notifly');
+    }
+
+    private function publishConfigs(): void
+    {
+        $this->publishes([
+            __DIR__ . '/../config/notifly.php' => config_path('notifly.php'),
+        ], 'config');
+    }
+
+    private function publishViews(): void
+    {
+        $this->publishes([
+            __DIR__ . '/../resources/views' => base_path('resources/views/vendor/notifly'),
+        ], 'views');
+    }
+
+    private function publishMigrations(): void
+    {
+        $files = [
+            'create_notifly_notification_table.php',
+            'create_notifly_read_notification_table.php',
+            'create_notifly_notification_actor_table.php',
+        ];
+        $paths = [];
+        foreach ($files as $fileName) {
+            $stubName = __DIR__ . '/../database/migrations/' . $fileName . '.stub';
+            $datePrefix = date('Y_m_d_His', time());
+            $migrationPath = database_path('migrations/' . $datePrefix . '_' . $fileName);
+            $paths[$stubName] = $migrationPath;
+        }
+        $this->publishes($paths, 'migrations');
+    }
+
+    private function bootCommands(): void
+    {
+        $this->commands([
+
+        ]);
     }
 }

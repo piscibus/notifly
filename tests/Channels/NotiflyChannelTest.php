@@ -1,9 +1,17 @@
 <?php
 
-namespace Piscibus\Notifly\Tests\TestModels;
+namespace Piscibus\Notifly\Tests\Channels;
 
 use Piscibus\Notifly\Tests\TestCase;
+use Piscibus\Notifly\Tests\TestMocks\Comment;
+use Piscibus\Notifly\Tests\TestMocks\CommentNotification;
+use Piscibus\Notifly\Tests\TestMocks\Post;
+use Piscibus\Notifly\Tests\TestMocks\User;
 
+/**
+ * Class NotiflyChannelTest
+ * @package Piscibus\Notifly\Tests\Channels
+ */
 class NotiflyChannelTest extends TestCase
 {
     /**
@@ -11,26 +19,22 @@ class NotiflyChannelTest extends TestCase
      */
     public function test_send()
     {
-        // Given
-        /** @var User $user */
         $user = factory(User::class)->create();
-        /** @var User $actor */
         $actor = factory(User::class)->create();
-        /** @var ObjectExample $object */
-        $object = factory(ObjectExample::class)->create();
-        /** @var TargetExample $target */
-        $target = factory(TargetExample::class)->create();
+        $post = factory(Post::class)->create();
+        $comment = factory(Comment::class)->create();
 
-        $notification = new NotificationExample($actor, $object, $target);
+        $commentNotification = new CommentNotification($actor, $comment, $post);
+        $user->notify($commentNotification);
+        
+        $expectedNotification = ['id' => $commentNotification->getId()];
+        $expectedActor = [
+            'notification_id' => $commentNotification->getId(),
+            'actor_id' => $actor->getId(),
+            'actor_type' => get_class($actor),
+        ];
 
-        // When
-        $user->notify($notification);
-
-        // Then
-        $this->assertDatabaseHas('notifly', [
-            'verb' => $notification->getVerb(),
-            'notifly_type' => $user->getType(),
-            'notifly_id' => $user->getId(),
-        ]);
+        $this->assertDatabaseHas('notification', $expectedNotification);
+        $this->assertDatabaseHas('notification_actor', $expectedActor);
     }
 }

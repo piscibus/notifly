@@ -3,20 +3,19 @@
 
 namespace Piscibus\Notifly\Traits;
 
-trait MorphAble
+trait Morphable
 {
     /**
-     * @return string
+     * @inheritDoc
      */
     public function getId(): string
     {
         $key = $this->getKeyName();
-
-        return (string)$this->$key;
+        return $this->$key;
     }
 
     /**
-     * @return string
+     * @inheritDoc
      */
     public function getType(): string
     {

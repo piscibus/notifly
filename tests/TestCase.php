@@ -4,7 +4,9 @@ namespace Piscibus\Notifly\Tests;
 
 use CreateExampleObjectTable;
 use CreateExampleTargetTable;
-use CreateNotiflyTable;
+use CreateNotiflyNotificationActorTable;
+use CreateNotiflyNotificationTable;
+use CreateNotiflyReadNotificationsTable;
 use CreateUserTable;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Piscibus\Notifly\NotiflyServiceProvider;
@@ -34,8 +36,13 @@ class TestCase extends Orchestra
             'prefix' => '',
         ]);
 
-        include_once __DIR__ . '/../database/migrations/create_notifly_table.php.stub';
-        (new CreateNotiflyTable())->up();
+        include_once __DIR__ . '/../database/migrations/create_notifly_notification_table.php.stub';
+        include_once __DIR__ . '/../database/migrations/create_notifly_read_notification_table.php.stub';
+        include_once __DIR__ . '/../database/migrations/create_notifly_notification_actor_table.php.stub';
+
+        (new CreateNotiflyNotificationTable())->up();
+        (new CreateNotiflyReadNotificationsTable())->up();
+        (new CreateNotiflyNotificationActorTable())->up();
 
         include_once __DIR__ . '/database/migrations/CreateUserTable.php';
         include_once __DIR__ . '/database/migrations/CreateExampleObjectTable.php';
