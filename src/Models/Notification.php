@@ -3,6 +3,7 @@
 
 namespace Piscibus\Notifly\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Piscibus\Notifly\Contracts\Morphable as Entity;
@@ -19,8 +20,10 @@ use Piscibus\Notifly\Contracts\Transformable;
  * @property string object_id
  * @property string target_type
  * @property string target_id
- * @property Carbon created_at
+ * @property Carbon added_on
+ * @property Carbon seen_at
  * @package Piscibus\Notifly\Models
+ * @method Builder where(array $attributes)
  */
 class Notification extends Model
 {
@@ -54,7 +57,7 @@ class Notification extends Model
         $item = new self();
         $item->id = $notification->getId();
         $item->verb = $notification->getVerb();
-        $item->created_at = $item->freshTimestamp();
+        $item->added_on = $item->freshTimestamp();
 
         $item->owner_type = $owner->getType();
         $item->owner_id = $owner->getId();
@@ -69,12 +72,37 @@ class Notification extends Model
     }
 
     /**
+     * @param Entity $owner
+     * @param NotiflyNotificationContract $notification
+     * @return static|null
+     */
+    public static function findByNotification(Entity $owner, NotiflyNotificationContract $notification): ?self
+    {
+        $model = new static();
+        $attributes = [
+            'verb' => $notification->getVerb(),
+            'owner_id' => $owner->getId(),
+            'owner_type' => $owner->getType(),
+            'target_type' => $notification->getTarget()->getType(),
+            'target_id' => $notification->getTarget()->getId(),
+        ];
+        /** @var self $item */
+        $item = $model->where($attributes)->first();
+
+        return $item;
+    }
+
+    /**
      * @param Transformable $actor
      * @return Model
      */
     public function addActor(Transformable $actor): Model
     {
-        $exists = $this->actors()->find($actor->getId());
+        $attributes = [
+            'actor_type' => $actor->getType(),
+            'actor_id' => $actor->getId(),
+        ];
+        $exists = $this->actors()->where($attributes)->first();
         return $exists ? $this->updateActor($exists) : $this->attachActor($actor);
     }
 
@@ -95,6 +123,7 @@ class Notification extends Model
     {
         $exists->added_on = $this->freshTimestamp();
         $exists->save();
+
         return $exists;
     }
 
@@ -108,6 +137,36 @@ class Notification extends Model
             'actor_type' => $actor->getType(),
             'actor_id' => $actor->getId(),
         ];
+
         return $this->actors()->create($attributes);
+    }
+
+    /**
+     * Pulls notifications to the top of the list
+     */
+    public function pullUp(): void
+    {
+        $this->forceFill([
+            'added_on' => $this->freshTimestamp(),
+            'seen_at' => null,
+        ]);
+    }
+
+    /**
+     * Marks notification as unseen
+     */
+    public function markAsUnseen(): void
+    {
+        $this->forceFill(['seen_at' => null])->save();
+    }
+
+    /**
+     * Marks notification as seen
+     */
+    public function markAsSeen(): void
+    {
+        if (is_null($this->seen_at)) {
+            $this->forceFill(['seen_at' => $this->freshTimestamp()])->save();
+        }
     }
 }

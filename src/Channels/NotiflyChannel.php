@@ -19,7 +19,14 @@ class NotiflyChannel implements NotiflyChannelContract
      */
     public function send(Notifiable $notifiable, Notification $notification): void
     {
-        $item = NotificationModel::init($notifiable, $notification);
+        $item = NotificationModel::findByNotification($notifiable, $notification);
+
+        if ($item) {
+            $item->pullUp();
+        } else {
+            $item = NotificationModel::init($notifiable, $notification);
+        }
+        
         $item->save();
         $item->addActor($notification->getActor());
     }
