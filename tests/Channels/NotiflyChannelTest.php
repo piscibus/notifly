@@ -2,6 +2,7 @@
 
 namespace Piscibus\Notifly\Tests\Channels;
 
+use Piscibus\Notifly\Models\NotificationActor;
 use Piscibus\Notifly\Tests\TestCase;
 use Piscibus\Notifly\Tests\TestMocks\Comment;
 use Piscibus\Notifly\Tests\TestMocks\CommentNotification;
@@ -68,5 +69,28 @@ class NotiflyChannelTest extends TestCase
 
         $this->assertDatabaseCount('notification', 1);
         $this->assertDatabaseCount('notification_actor', 3);
+    }
+
+    /**
+     * @test
+     */
+    public function test_it_pulls_actor_up_if_reacted()
+    {
+        $actors = factory(User::class, 2)->create();
+        $comments = factory(Comment::class, 2)->create();
+
+        $this->user->notify(new CommentNotification($actors[0], $comments[0], $this->post));
+        sleep(1);
+        $this->user->notify(new CommentNotification($actors[1], $comments[1], $this->post));
+
+        // assert before react
+        $topActor = NotificationActor::orderBy('updated_at', 'DESC')->first();
+        $this->assertEquals($actors[1]->id, $topActor->actor_id);
+
+        // assert after react
+        sleep(1);
+        $this->user->notify(new CommentNotification($actors[0], $comments[0], $this->post));
+        $topActor = NotificationActor::orderBy('updated_at', 'DESC')->first();
+        $this->assertEquals($actors[0]->id, $topActor->actor_id);
     }
 }
