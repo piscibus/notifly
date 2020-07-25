@@ -20,7 +20,7 @@ class CreateNotiflyReadNotificationsTable extends Migration
             $table->string('verb');
             $table->uuidMorphs('object');
             $table->uuidMorphs('target');
-            $table->timestamp('created_at');
+            $table->timestamps();
             $table->timestamp('seen_at');
         });
     }

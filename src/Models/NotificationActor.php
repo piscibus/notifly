@@ -15,11 +15,6 @@ class NotificationActor extends Model
     /**
      * @var bool
      */
-    public $timestamps = false;
-
-    /**
-     * @var bool
-     */
     public $incrementing = false;
 
     /**
@@ -45,7 +40,16 @@ class NotificationActor extends Model
         parent::boot();
         static::creating(function (Model $item) {
             $item->id = (string)Str::orderedUuid();
-            $item->added_on = $item->freshTimestamp();
         });
+    }
+
+    /**
+     * @return $this
+     */
+    public function pullUp(): self
+    {
+        $this->forceFill(['updated_at' => $this->freshTimestamp()])->save();
+
+        return $this;
     }
 }

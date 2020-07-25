@@ -20,18 +20,14 @@ use Piscibus\Notifly\Contracts\Transformable;
  * @property string object_id
  * @property string target_type
  * @property string target_id
- * @property Carbon added_on
+ * @property Carbon created_at
+ * @property Carbon updated_at
  * @property Carbon seen_at
  * @package Piscibus\Notifly\Models
  * @method Builder where(array $attributes)
  */
 class Notification extends Model
 {
-    /**
-     * @var bool
-     */
-    public $timestamps = false;
-
     /**
      * @var bool
      */
@@ -57,7 +53,6 @@ class Notification extends Model
         $item = new self();
         $item->id = $notification->getId();
         $item->verb = $notification->getVerb();
-        $item->added_on = $item->freshTimestamp();
 
         $item->owner_type = $owner->getType();
         $item->owner_id = $owner->getId();
@@ -94,17 +89,18 @@ class Notification extends Model
 
     /**
      * @param Transformable $actor
-     * @return Model
+     * @return NotificationActor
      */
-    public function addActor(Transformable $actor): Model
+    public function addActor(Transformable $actor): NotificationActor
     {
         $attributes = [
             'actor_type' => $actor->getType(),
             'actor_id' => $actor->getId(),
         ];
+        /** @var NotificationActor $exists */
         $exists = $this->actors()->where($attributes)->first();
 
-        return $exists ? $this->updateActor($exists) : $this->attachActor($actor);
+        return $exists ? $exists->pullUp() : $this->attachActor($actor);
     }
 
     /**
@@ -113,26 +109,14 @@ class Notification extends Model
     public function actors()
     {
         return $this->hasMany(NotificationActor::class)
-            ->orderBy('added_on', 'DESC');
-    }
-
-    /**
-     * @param $exists
-     * @return mixed
-     */
-    private function updateActor(Model $exists)
-    {
-        $exists->added_on = $this->freshTimestamp();
-        $exists->save();
-
-        return $exists;
+            ->orderBy('updated_at', 'DESC');
     }
 
     /**
      * @param Transformable $actor
-     * @return Model
+     * @return NotificationActor|Model
      */
-    private function attachActor(Transformable $actor): Model
+    private function attachActor(Transformable $actor): NotificationActor
     {
         $attributes = [
             'actor_type' => $actor->getType(),
@@ -143,14 +127,16 @@ class Notification extends Model
     }
 
     /**
-     * Pulls notifications to the top of the list
+     * @return $this
      */
-    public function pullUp(): void
+    public function pullUp(): self
     {
         $this->forceFill([
-            'added_on' => $this->freshTimestamp(),
+            'updated_at' => $this->freshTimestamp(),
             'seen_at' => null,
-        ]);
+        ])->save();
+
+        return $this;
     }
 
     /**

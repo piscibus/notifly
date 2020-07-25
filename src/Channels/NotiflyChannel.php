@@ -25,9 +25,8 @@ class NotiflyChannel implements NotiflyChannelContract
             $item->pullUp();
         } else {
             $item = NotificationModel::init($notifiable, $notification);
+            $item->save();
         }
-        
-        $item->save();
         $item->addActor($notification->getActor());
     }
 }

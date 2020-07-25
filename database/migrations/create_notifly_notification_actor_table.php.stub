@@ -18,7 +18,7 @@ class CreateNotiflyNotificationActorTable extends Migration
             $table->uuid('id')->primary();
             $table->uuid('notification_id');
             $table->uuidMorphs('actor');
-            $table->timestamp('added_on');
+            $table->timestamps();
         });
     }
 
