@@ -5,10 +5,10 @@ namespace Piscibus\Notifly\Tests\Traits;
 use Piscibus\Notifly\Models\Notification;
 use Piscibus\Notifly\Models\ReadNotification;
 use Piscibus\Notifly\Tests\TestCase;
-use Piscibus\Notifly\Tests\TestMocks\Comment;
-use Piscibus\Notifly\Tests\TestMocks\CommentNotification;
-use Piscibus\Notifly\Tests\TestMocks\Post;
-use Piscibus\Notifly\Tests\TestMocks\User;
+use Piscibus\Notifly\Tests\TestMocks\Models\Comment;
+use Piscibus\Notifly\Tests\TestMocks\Models\CommentNotification;
+use Piscibus\Notifly\Tests\TestMocks\Models\Post;
+use Piscibus\Notifly\Tests\TestMocks\Models\User;
 
 class NotifiableTest extends TestCase
 {

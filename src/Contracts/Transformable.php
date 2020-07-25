@@ -3,6 +3,8 @@
 
 namespace Piscibus\Notifly\Contracts;
 
+use Illuminate\Http\Resources\Json\JsonResource;
+
 /**
  * Interface Transformable
  * @package Piscibus\Notifly\Contracts
@@ -10,7 +12,7 @@ namespace Piscibus\Notifly\Contracts;
 interface Transformable extends Morphable
 {
     /**
-     * @return Transformer
+     * @return JsonResource
      */
-    public function getTransformer(): Transformer;
+    public function getTransformer(): JsonResource;
 }

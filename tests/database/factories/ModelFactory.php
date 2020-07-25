@@ -5,9 +5,9 @@ use Faker\Generator;
 use Illuminate\Support\Str;
 use Piscibus\Notifly\Models\Notification;
 use Piscibus\Notifly\Models\ReadNotification;
-use Piscibus\Notifly\Tests\TestMocks\Comment;
-use Piscibus\Notifly\Tests\TestMocks\Post;
-use Piscibus\Notifly\Tests\TestMocks\User;
+use Piscibus\Notifly\Tests\TestMocks\Models\Comment;
+use Piscibus\Notifly\Tests\TestMocks\Models\Post;
+use Piscibus\Notifly\Tests\TestMocks\Models\User;
 
 $factory->define(User::class, function (Generator $faker) {
     return [];
