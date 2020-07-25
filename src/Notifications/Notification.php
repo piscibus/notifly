@@ -38,7 +38,7 @@ class Notification extends BaseNotification implements NotiflyNotificationContra
      */
     public function __construct(Transformable $actor, Transformable $object, Transformable $target)
     {
-        $this->id = Str::orderedUuid();
+        $this->id = (string)Str::orderedUuid();
         $this->actor = $actor;
         $this->object = $object;
         $this->target = $target;
