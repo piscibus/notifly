@@ -93,4 +93,20 @@ class NotiflyChannelTest extends TestCase
         $topActor = NotificationActor::orderBy('updated_at', 'DESC')->first();
         $this->assertEquals($actors[0]->id, $topActor->actor_id);
     }
+
+    /**
+     * @test
+     */
+    public function test_it_restores_the_read_notification_on_reacting()
+    {
+        $actor = factory(User::class)->create();
+        $comments = factory(Comment::class, 2)->create();
+        // send first notification
+        $this->user->notify(new CommentNotification($actor, $comments[0], $this->post));
+        // mark the first notification as read
+        $this->user->notifications->first()->markAsRead();
+        // send another notification
+        $this->user->notify(new CommentNotification($actor, $comments[0], $this->post));
+        $this->assertEquals(1, $this->user->notifications->count());
+    }
 }

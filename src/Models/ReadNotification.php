@@ -4,6 +4,7 @@
 namespace Piscibus\Notifly\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Piscibus\Notifly\Traits\Findable;
 
 /**
  * Class ReadNotification
@@ -11,6 +12,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ReadNotification extends Model
 {
+    use Findable;
+
     /**
      * @var bool
      */
@@ -48,5 +51,16 @@ class ReadNotification extends Model
     {
         return $this->hasMany(NotificationActor::class, 'notification_id')
             ->orderBy('updated_at', 'DESC');
+    }
+
+    /**
+     * @return Notification
+     */
+    public function markAsUnRead(): Notification
+    {
+        $this->forceFill(['seen_at' => null]);
+        $this->delete();
+
+        return Notification::fromReadNotification($this);
     }
 }

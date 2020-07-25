@@ -9,6 +9,7 @@ use Illuminate\Support\Carbon;
 use Piscibus\Notifly\Contracts\Morphable as Entity;
 use Piscibus\Notifly\Contracts\NotiflyNotificationContract;
 use Piscibus\Notifly\Contracts\Transformable;
+use Piscibus\Notifly\Traits\Findable;
 
 /**
  * Class Notification
@@ -28,6 +29,8 @@ use Piscibus\Notifly\Contracts\Transformable;
  */
 class Notification extends Model
 {
+    use Findable;
+
     /**
      * @var bool
      */
@@ -67,22 +70,16 @@ class Notification extends Model
     }
 
     /**
-     * @param Entity $owner
-     * @param NotiflyNotificationContract $notification
-     * @return static|null
+     * @param ReadNotification $notification
+     * @return Notification
      */
-    public static function findByNotification(Entity $owner, NotiflyNotificationContract $notification): ?self
+    public static function fromReadNotification(ReadNotification $notification): self
     {
-        $model = new static();
-        $attributes = [
-            'verb' => $notification->getVerb(),
-            'owner_id' => $owner->getId(),
-            'owner_type' => $owner->getType(),
-            'target_type' => $notification->getTarget()->getType(),
-            'target_id' => $notification->getTarget()->getId(),
-        ];
-        /** @var self $item */
-        $item = $model->where($attributes)->first();
+        $item = new self();
+        $attributes = $notification->getAttributes();
+        unset($attributes['updated_at']);
+        $item->forceFill($attributes);
+        $item->save();
 
         return $item;
     }
