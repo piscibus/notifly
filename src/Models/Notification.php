@@ -114,7 +114,7 @@ class Notification extends Model
 
     /**
      * @param Transformable $actor
-     * @return NotificationActor|Model
+     * @return NotificationActor
      */
     private function attachActor(Transformable $actor): NotificationActor
     {
@@ -142,18 +142,22 @@ class Notification extends Model
     /**
      * Marks notification as unseen
      */
-    public function markAsUnseen(): void
+    public function markAsUnseen(): self
     {
         $this->forceFill(['seen_at' => null])->save();
+
+        return $this;
     }
 
     /**
      * Marks notification as seen
      */
-    public function markAsSeen(): void
+    public function markAsSeen(): self
     {
         if (is_null($this->seen_at)) {
             $this->forceFill(['seen_at' => $this->freshTimestamp()])->save();
         }
+
+        return $this;
     }
 }
