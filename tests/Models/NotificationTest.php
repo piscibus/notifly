@@ -28,4 +28,18 @@ class NotificationTest extends TestCase
         $notification->markAsUnseen();
         $this->assertNull($notification->getSeenAt());
     }
+
+    /**
+     * @test
+     */
+    public function test_it_can_mark_notification_as_read()
+    {
+        /** @var Notification $notification */
+        $notification = factory(Notification::class)->create();
+        $readNotification = $notification->markAsRead();
+
+        $this->assertDatabaseMissing('notification', ['id' => $notification->id]);
+        $this->assertDatabaseHas('read_notification', ['id' => $notification->id]);
+        $this->assertEquals($readNotification->actors, $notification->actors);
+    }
 }

@@ -160,12 +160,23 @@ class Notification extends Model
 
         return $this;
     }
-    
+
     /**
      * @return Carbon|null
      */
     public function getSeenAt(): ?Carbon
     {
         return $this->seen_at;
+    }
+
+    /**
+     * @return ReadNotification
+     * @throws
+     */
+    public function markAsRead(): ReadNotification
+    {
+        $this->forceFill(['seen_at' => $this->freshTimestamp()]);
+        $this->delete();
+        return ReadNotification::fromNotification($this);
     }
 }
