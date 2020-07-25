@@ -177,6 +177,7 @@ class Notification extends Model
     {
         $this->forceFill(['seen_at' => $this->freshTimestamp()]);
         $this->delete();
+
         return ReadNotification::fromNotification($this);
     }
 }
