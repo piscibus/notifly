@@ -103,6 +103,7 @@ class Notification extends Model
             'actor_id' => $actor->getId(),
         ];
         $exists = $this->actors()->where($attributes)->first();
+
         return $exists ? $this->updateActor($exists) : $this->attachActor($actor);
     }
 
