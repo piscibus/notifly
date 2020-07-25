@@ -160,7 +160,15 @@ class Notification extends Model
 
         return $this;
     }
-    
+
+    /**
+     * @return array
+     */
+    public function getFillable(): array
+    {
+        return $this->fillable;
+    }
+
     /**
      * @return Carbon|null
      */
