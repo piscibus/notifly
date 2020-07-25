@@ -37,6 +37,7 @@ class ReadNotification extends Model
         unset($attributes['updated_at']);
         $item->forceFill($attributes);
         $item->save();
+
         return $item;
     }
 

@@ -3,6 +3,7 @@
 namespace Piscibus\Notifly\Tests\Traits;
 
 use Piscibus\Notifly\Models\Notification;
+use Piscibus\Notifly\Models\ReadNotification;
 use Piscibus\Notifly\Tests\TestCase;
 use Piscibus\Notifly\Tests\TestMocks\Comment;
 use Piscibus\Notifly\Tests\TestMocks\CommentNotification;
@@ -71,5 +72,19 @@ class NotifiableTest extends TestCase
         ]);
         $seenNotifications = $this->user->seenNotifications;
         $this->assertEquals($amount, $seenNotifications->count());
+    }
+
+    /**
+     * @test
+     */
+    public function test_notifiable_can_get_read_notifications()
+    {
+        $amount = 30;
+        factory(ReadNotification::class, $amount)->create([
+            'owner_type' => $this->user->getType(),
+            'owner_id' => $this->user->getId(),
+        ]);
+        $readNotifications = $this->user->readNotifications;
+        $this->assertEquals($amount, $readNotifications->count());
     }
 }

@@ -5,6 +5,7 @@ namespace Piscibus\Notifly\Traits;
 
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Piscibus\Notifly\Models\Notification;
+use Piscibus\Notifly\Models\ReadNotification;
 
 /**
  * Trait HasDatabaseNotifications
@@ -20,6 +21,17 @@ trait HasDatabaseNotifications
     public function notifications()
     {
         return $this->morphMany(Notification::class, 'owner')
+            ->orderBy('updated_at', 'desc');
+    }
+
+    /**
+     * Get the entity's read notifications
+     *
+     * @return MorphMany
+     */
+    public function readNotifications()
+    {
+        return $this->morphMany(ReadNotification::class, 'owner')
             ->orderBy('updated_at', 'desc');
     }
 
