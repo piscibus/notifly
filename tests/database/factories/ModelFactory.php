@@ -27,6 +27,7 @@ $factory->define(Notification::class, function (Generator $faker) {
     $object = factory(Comment::class)->create();
     /** @var Post $target */
     $target = factory(Post::class)->create();
+
     return [
         'id' => (string)Str::orderedUuid(),
         'owner_type' => $owner->getType(),
