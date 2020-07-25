@@ -15,18 +15,33 @@ use Piscibus\Notifly\Tests\TestMocks\User;
 class NotiflyChannelTest extends TestCase
 {
     /**
+     * @var User
+     */
+    private $user;
+
+    /**
+     * @var Post
+     */
+    private $post;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->user = factory(User::class)->create();
+        $this->post = factory(Post::class)->create();
+    }
+
+    /**
      * @test
      */
     public function test_send()
     {
-        $user = factory(User::class)->create();
         $actor = factory(User::class)->create();
-        $post = factory(Post::class)->create();
         $comment = factory(Comment::class)->create();
 
-        $commentNotification = new CommentNotification($actor, $comment, $post);
-        $user->notify($commentNotification);
-        
+        $commentNotification = new CommentNotification($actor, $comment, $this->post);
+        $this->user->notify($commentNotification);
+
         $expectedNotification = ['id' => $commentNotification->getId()];
         $expectedActor = [
             'notification_id' => $commentNotification->getId(),
@@ -36,5 +51,22 @@ class NotiflyChannelTest extends TestCase
 
         $this->assertDatabaseHas('notification', $expectedNotification);
         $this->assertDatabaseHas('notification_actor', $expectedActor);
+    }
+
+    /**
+     * @test
+     */
+    public function test_it_aggregates_actors_on_the_same_notification()
+    {
+        $actors = factory(User::class, 3)->create();
+        $comments = factory(Comment::class, 3)->create();
+
+        for ($i = 0; $i < 3; $i++) {
+            $notification = new CommentNotification($actors[$i], $comments[$i], $this->post);
+            $this->user->notify($notification);
+        }
+
+        $this->assertDatabaseCount('notification', 1);
+        $this->assertDatabaseCount('notification_actor', 3);
     }
 }
