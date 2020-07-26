@@ -4,6 +4,7 @@
 namespace Piscibus\Notifly\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Str;
 
 /**
@@ -51,5 +52,13 @@ class NotificationActor extends Model
         $this->forceFill(['updated_at' => $this->freshTimestamp()])->save();
 
         return $this;
+    }
+
+    /**
+     * @return MorphTo
+     */
+    public function actor()
+    {
+        return $this->morphTo('actor');
     }
 }

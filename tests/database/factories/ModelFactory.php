@@ -4,6 +4,7 @@
 use Faker\Generator;
 use Illuminate\Support\Str;
 use Piscibus\Notifly\Models\Notification;
+use Piscibus\Notifly\Models\NotificationActor;
 use Piscibus\Notifly\Models\ReadNotification;
 use Piscibus\Notifly\Tests\TestMocks\Models\Comment;
 use Piscibus\Notifly\Tests\TestMocks\Models\Post;
@@ -59,5 +60,14 @@ $factory->define(ReadNotification::class, function (Generator $faker) {
         'target_type' => $target->getType(),
         'target_id' => $target->getId(),
         'seen_at' => now(),
+    ];
+});
+$factory->define(NotificationActor::class, function (Generator $faker) {
+    $actor = factory(User::class)->create();
+
+    return [
+        'id' => (string)Str::orderedUuid(),
+        'actor_type' => $actor->getType(),
+        'actor_id' => $actor->getId(),
     ];
 });

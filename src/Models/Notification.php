@@ -6,6 +6,7 @@ namespace Piscibus\Notifly\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Piscibus\Notifly\Contracts\Morphable as Entity;
 use Piscibus\Notifly\Contracts\NotiflyNotificationContract;
 use Piscibus\Notifly\Contracts\Transformable;
@@ -24,6 +25,9 @@ use Piscibus\Notifly\Traits\Findable;
  * @property Carbon created_at
  * @property Carbon updated_at
  * @property Carbon seen_at
+ * @property mixed object
+ * @property mixed target
+ * @property mixed jsonableActors
  * @package Piscibus\Notifly\Models
  * @method Builder where(array $attributes)
  */
@@ -110,6 +114,30 @@ class Notification extends Model
     }
 
     /**
+     * @return mixed
+     */
+    public function jsonableActors()
+    {
+        return $this->actors()->with('actor');
+    }
+
+    /**
+     * Get the notification object
+     */
+    public function object()
+    {
+        return $this->morphTo('object');
+    }
+
+    /**
+     * Get the notification target
+     */
+    public function target()
+    {
+        return $this->morphTo('target');
+    }
+
+    /**
      * @param Transformable $actor
      * @return NotificationActor
      */
@@ -120,7 +148,10 @@ class Notification extends Model
             'actor_id' => $actor->getId(),
         ];
 
-        return $this->actors()->create($attributes);
+        /** @var NotificationActor $actor */
+        $actor = $this->actors()->create($attributes);
+
+        return $actor;
     }
 
     /**
@@ -176,5 +207,74 @@ class Notification extends Model
         $this->delete();
 
         return ReadNotification::fromNotification($this);
+    }
+
+    /**
+     * @return string
+     */
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVerb(): string
+    {
+        return $this->verb;
+    }
+
+    /**
+     * @return Carbon
+     */
+    public function getTime(): Carbon
+    {
+        return $this->updated_at;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getObject()
+    {
+        return $this->object;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTarget()
+    {
+        return $this->target;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getTrimmedActors(): Collection
+    {
+        $actors = $this->jsonableActors;
+        $maxCount = config('notifly.actors_count');
+        if ($actors->count() > $maxCount) {
+            $actors = $actors->take($maxCount);
+        }
+        return $actors;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTrimmed(): int
+    {
+        return 0;
+    }
+
+    /**
+     * @return array
+     */
+    public function getIcon(): array
+    {
+        return [];
     }
 }
