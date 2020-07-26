@@ -3,6 +3,7 @@
 
 namespace Piscibus\Notifly\Models;
 
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
@@ -12,6 +13,7 @@ use Piscibus\Notifly\Contracts\NotiflyNotificationContract;
 use Piscibus\Notifly\Contracts\Transformable;
 use Piscibus\Notifly\Notifications\Icon;
 use Piscibus\Notifly\Traits\Findable;
+use RuntimeException;
 
 /**
  * Class Notification
@@ -208,7 +210,12 @@ class Notification extends Model
     public function markAsRead(): ReadNotification
     {
         $this->forceFill(['seen_at' => $this->freshTimestamp()]);
-        $this->delete();
+
+        try {
+            $this->delete();
+        } catch (Exception $e) {
+            throw new RuntimeException($e->getMessage());
+        }
 
         return ReadNotification::fromNotification($this);
     }

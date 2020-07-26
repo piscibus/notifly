@@ -3,11 +3,13 @@
 
 namespace Piscibus\Notifly\Models;
 
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Piscibus\Notifly\Notifications\Icon;
 use Piscibus\Notifly\Traits\Findable;
+use RuntimeException;
 
 /**
  * Class ReadNotification
@@ -86,7 +88,12 @@ class ReadNotification extends Model
     public function markAsUnRead(): Notification
     {
         $this->forceFill(['seen_at' => null]);
-        $this->delete();
+
+        try {
+            $this->delete();
+        } catch (Exception $e) {
+            throw new RuntimeException($e->getMessage());
+        }
 
         return Notification::fromReadNotification($this);
     }
