@@ -9,5 +9,4 @@ namespace Piscibus\Notifly\Resources;
  */
 class ReadNotificationResource extends NotificationJsonResource
 {
-    
 }
