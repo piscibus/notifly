@@ -28,7 +28,7 @@ use Piscibus\Notifly\Traits\Findable;
  * @property Carbon seen_at
  * @property mixed object
  * @property mixed target
- * @property mixed jsonableActors
+ * @property Collection jsonableActors
  * @property Collection actors
  * @package Piscibus\Notifly\Models
  * @method Builder where(array $attributes)
@@ -149,7 +149,7 @@ class Notification extends Model
 
         /** @var NotificationActor $actor */
         $actor = $this->actors()->create($attributes);
-
+        
         if ($this->shouldTrimActors()) {
             $this->trimActors();
         }
@@ -257,13 +257,7 @@ class Notification extends Model
      */
     public function getTrimmedActors(): Collection
     {
-        $actors = $this->jsonableActors;
-        $maxCount = config('notifly.actors_count');
-        if ($actors->count() > $maxCount) {
-            $actors = $actors->take($maxCount);
-        }
-
-        return $actors;
+        return $this->jsonableActors;
     }
 
     /**
@@ -297,8 +291,7 @@ class Notification extends Model
      */
     private function trimActors(): void
     {
-        $extraActors = $this->actors->skip(2)->pluck('id');
-        NotificationActor::whereIn('id', $extraActors)->delete();
-        $this->increment('trimmed_actors', $extraActors->count());
+        $this->actors->last()->delete();
+        $this->increment('trimmed_actors');
     }
 }

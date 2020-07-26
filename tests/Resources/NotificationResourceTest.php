@@ -17,7 +17,7 @@ class NotificationResourceTest extends TestCase
     /**
      * @test
      */
-    public function test_to_array()
+    public function test_notifications_to_array()
     {
         $user = factory(User::class)->create();
         $attributes = [
