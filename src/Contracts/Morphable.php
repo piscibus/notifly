@@ -18,6 +18,4 @@ interface Morphable
      * @return string
      */
     public function getType(): string;
-
-//    TODO: add a common transformer and implement getTransformer method
 }

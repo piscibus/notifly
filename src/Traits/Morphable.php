@@ -3,6 +3,9 @@
 
 namespace Piscibus\Notifly\Traits;
 
+use Illuminate\Http\Resources\Json\JsonResource;
+use Piscibus\Notifly\Resources\CommonResource;
+
 trait Morphable
 {
     /**
@@ -21,5 +24,13 @@ trait Morphable
     public function getType(): string
     {
         return get_class($this);
+    }
+
+    /**
+     * @return JsonResource
+     */
+    public function getTransformer(): JsonResource
+    {
+        return new CommonResource($this);
     }
 }
