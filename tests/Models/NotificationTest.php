@@ -35,7 +35,7 @@ class NotificationTest extends TestCase
     public function test_it_can_mark_notification_as_read()
     {
         /** @var Notification $notification */
-        $notification = factory(Notification::class)->create();
+        $notification = factory(Notification::class)->create()->fresh();
         $readNotification = $notification->markAsRead();
 
         $this->assertDatabaseMissing('notification', ['id' => $notification->id]);

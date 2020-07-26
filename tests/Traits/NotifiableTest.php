@@ -83,6 +83,7 @@ class NotifiableTest extends TestCase
         factory(ReadNotification::class, $amount)->create([
             'owner_type' => $this->user->getType(),
             'owner_id' => $this->user->getId(),
+            'trimmed_actors' => 0,
         ]);
         $readNotifications = $this->user->readNotifications;
         $this->assertEquals($amount, $readNotifications->count());

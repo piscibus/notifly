@@ -59,6 +59,7 @@ class NotiflyChannelTest extends TestCase
      */
     public function test_it_aggregates_actors_on_the_same_notification()
     {
+        $this->app['config']->set('notifly.max_actors_count', 10);
         $actors = factory(User::class, 3)->create();
         $comments = factory(Comment::class, 3)->create();
 

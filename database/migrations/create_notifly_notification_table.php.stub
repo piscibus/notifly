@@ -20,6 +20,7 @@ class CreateNotiflyNotificationTable extends Migration
             $table->string('verb');
             $table->uuidMorphs('object');
             $table->uuidMorphs('target');
+            $table->unsignedInteger('trimmed_actors')->default(0);
             $table->timestamps();
             $table->timestamp('seen_at')->nullable();
         });

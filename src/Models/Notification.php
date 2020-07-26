@@ -22,12 +22,14 @@ use Piscibus\Notifly\Traits\Findable;
  * @property string object_id
  * @property string target_type
  * @property string target_id
+ * @property int trimmed_actors
  * @property Carbon created_at
  * @property Carbon updated_at
  * @property Carbon seen_at
  * @property mixed object
  * @property mixed target
  * @property mixed jsonableActors
+ * @property Collection actors
  * @package Piscibus\Notifly\Models
  * @method Builder where(array $attributes)
  */
@@ -143,13 +145,14 @@ class Notification extends Model
      */
     private function attachActor(Transformable $actor): NotificationActor
     {
-        $attributes = [
-            'actor_type' => $actor->getType(),
-            'actor_id' => $actor->getId(),
-        ];
+        $attributes = ['actor_type' => $actor->getType(), 'actor_id' => $actor->getId()];
 
         /** @var NotificationActor $actor */
         $actor = $this->actors()->create($attributes);
+
+        if ($this->shouldTrimActors()) {
+            $this->trimActors();
+        }
 
         return $actor;
     }
@@ -268,7 +271,7 @@ class Notification extends Model
      */
     public function getTrimmed(): int
     {
-        return 0;
+        return $this->trimmed_actors;
     }
 
     /**
@@ -277,5 +280,25 @@ class Notification extends Model
     public function getIcon(): array
     {
         return [];
+    }
+
+    /**
+     * @return bool
+     */
+    private function shouldTrimActors(): bool
+    {
+        $maxActorsCount = config('notifly.max_actors_count');
+
+        return $this->actors->count() > $maxActorsCount;
+    }
+
+    /**
+     * Trim actors to the max actors count
+     */
+    private function trimActors(): void
+    {
+        $extraActors = $this->actors->skip(2)->pluck('id');
+        NotificationActor::whereIn('id', $extraActors)->delete();
+        $this->increment('trimmed_actors', $extraActors->count());
     }
 }

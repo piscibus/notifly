@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'actors_count' => 2,
+    'max_actors_count' => 2,
 ];
