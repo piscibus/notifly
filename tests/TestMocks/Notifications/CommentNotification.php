@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Piscibus\Notifly\Tests\TestMocks\Models;
+namespace Piscibus\Notifly\Tests\TestMocks\Notifications;
 
 use Piscibus\Notifly\Channels\NotiflyChannel;
 use Piscibus\Notifly\Notifications\Notification;

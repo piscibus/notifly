@@ -6,6 +6,7 @@ namespace Piscibus\Notifly\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Piscibus\Notifly\Notifications\Icon;
 use Piscibus\Notifly\Traits\Findable;
 
 /**
@@ -151,6 +152,13 @@ class ReadNotification extends Model
      */
     public function getIcon(): array
     {
-        return [];
+        $iconClass = config("notifly.icons.$this->verb");
+        if (is_null($iconClass)) {
+            return [];
+        }
+        /** @var Icon $icon */
+        $icon = new $iconClass($this->jsonableActors, $this->object, $this->target);
+
+        return $icon->toArray();
     }
 }

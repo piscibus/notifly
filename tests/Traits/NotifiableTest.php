@@ -6,9 +6,9 @@ use Piscibus\Notifly\Models\Notification;
 use Piscibus\Notifly\Models\ReadNotification;
 use Piscibus\Notifly\Tests\TestCase;
 use Piscibus\Notifly\Tests\TestMocks\Models\Comment;
-use Piscibus\Notifly\Tests\TestMocks\Models\CommentNotification;
 use Piscibus\Notifly\Tests\TestMocks\Models\Post;
 use Piscibus\Notifly\Tests\TestMocks\Models\User;
+use Piscibus\Notifly\Tests\TestMocks\Notifications\CommentNotification;
 
 class NotifiableTest extends TestCase
 {

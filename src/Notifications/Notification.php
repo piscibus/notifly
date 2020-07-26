@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 use Piscibus\Notifly\Contracts\NotiflyNotificationContract;
 use Piscibus\Notifly\Contracts\Transformable;
 
-class Notification extends BaseNotification implements NotiflyNotificationContract
+abstract class Notification extends BaseNotification implements NotiflyNotificationContract
 {
     /**
      * @var Transformable

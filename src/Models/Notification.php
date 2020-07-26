@@ -10,6 +10,7 @@ use Illuminate\Support\Collection;
 use Piscibus\Notifly\Contracts\Morphable as Entity;
 use Piscibus\Notifly\Contracts\NotiflyNotificationContract;
 use Piscibus\Notifly\Contracts\Transformable;
+use Piscibus\Notifly\Notifications\Icon;
 use Piscibus\Notifly\Traits\Findable;
 
 /**
@@ -149,7 +150,7 @@ class Notification extends Model
 
         /** @var NotificationActor $actor */
         $actor = $this->actors()->create($attributes);
-        
+
         if ($this->shouldTrimActors()) {
             $this->trimActors();
         }
@@ -273,7 +274,14 @@ class Notification extends Model
      */
     public function getIcon(): array
     {
-        return [];
+        $iconClass = config("notifly.icons.$this->verb");
+        if (is_null($iconClass)) {
+            return [];
+        }
+        /** @var Icon $icon */
+        $icon = new $iconClass($this->jsonableActors, $this->object, $this->target);
+
+        return $icon->toArray();
     }
 
     /**

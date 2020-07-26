@@ -5,9 +5,9 @@ namespace Piscibus\Notifly\Tests\Channels;
 use Piscibus\Notifly\Models\NotificationActor;
 use Piscibus\Notifly\Tests\TestCase;
 use Piscibus\Notifly\Tests\TestMocks\Models\Comment;
-use Piscibus\Notifly\Tests\TestMocks\Models\CommentNotification;
 use Piscibus\Notifly\Tests\TestMocks\Models\Post;
 use Piscibus\Notifly\Tests\TestMocks\Models\User;
+use Piscibus\Notifly\Tests\TestMocks\Notifications\CommentNotification;
 
 /**
  * Class NotiflyChannelTest
