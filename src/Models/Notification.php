@@ -271,6 +271,7 @@ class Notification extends Model
 
     /**
      * @return array
+     * @psalm-suppress UndefinedClass
      */
     public function getIcon(): array
     {
