@@ -21,6 +21,7 @@ class NotificationResource extends JsonResource
     {
         /** @var Notification $notification */
         $notification = $this->resource;
+
         return [
             'id' => $notification->getId(),
             'verb' => $notification->getVerb(),

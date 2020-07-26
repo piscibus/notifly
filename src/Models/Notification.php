@@ -259,6 +259,7 @@ class Notification extends Model
         if ($actors->count() > $maxCount) {
             $actors = $actors->take($maxCount);
         }
+
         return $actors;
     }
 
