@@ -4,6 +4,8 @@
 namespace Piscibus\Notifly\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Piscibus\Notifly\Traits\Findable;
 
 /**
@@ -54,6 +56,30 @@ class ReadNotification extends Model
     }
 
     /**
+     * @return mixed
+     */
+    public function jsonableActors()
+    {
+        return $this->actors()->with('actor');
+    }
+
+    /**
+     * Get the notification object
+     */
+    public function object()
+    {
+        return $this->morphTo('object');
+    }
+
+    /**
+     * Get the notification target
+     */
+    public function target()
+    {
+        return $this->morphTo('target');
+    }
+
+    /**
      * @return Notification
      */
     public function markAsUnRead(): Notification
@@ -62,5 +88,69 @@ class ReadNotification extends Model
         $this->delete();
 
         return Notification::fromReadNotification($this);
+    }
+
+    /**
+     * @return string
+     */
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVerb(): string
+    {
+        return $this->verb;
+    }
+
+    /**
+     * @return Carbon
+     */
+    public function getTime(): Carbon
+    {
+        return $this->updated_at;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getObject()
+    {
+        return $this->object;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTarget()
+    {
+        return $this->target;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getTrimmedActors(): Collection
+    {
+        return $this->jsonableActors;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTrimmed(): int
+    {
+        return $this->trimmed_actors;
+    }
+
+    /**
+     * @return array
+     */
+    public function getIcon(): array
+    {
+        return [];
     }
 }

@@ -16,4 +16,12 @@ trait HasJsonableNotifications
     {
         return $this->notifications()->with('jsonableActors');
     }
+
+    /**
+     * @return mixed
+     */
+    public function jsonableReadNotifications()
+    {
+        return $this->readNotifications()->with('jsonableActors');
+    }
 }
