@@ -5,8 +5,10 @@ namespace Piscibus\Notifly\Commands;
 
 use Illuminate\Console\GeneratorCommand;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
 /**
  * Class NotificationMakeCommand
@@ -28,6 +30,21 @@ class NotificationMakeCommand extends GeneratorCommand
      * @var string
      */
     protected $type = 'Notification';
+
+    /**
+     * @return bool|null
+     * @throws FileNotFoundException
+     */
+    public function handle()
+    {
+        $response = parent::handle();
+        if ($this->option('icon')) {
+            $name = sprintf("%sIcon", $this->getNameInput());
+            Artisan::call(sprintf("notifly:make:icon %s", $name));
+        }
+
+        return $response;
+    }
 
     /**
      * @inheritDoc
@@ -72,6 +89,16 @@ class NotificationMakeCommand extends GeneratorCommand
         ];
 
         return array_merge(parent::getArguments(), $arguments);
+    }
+
+    /**
+     * @return array
+     */
+    protected function getOptions()
+    {
+        return [
+            ['icon', 'i', InputOption::VALUE_NONE, 'Create an icon class for the created notification class.'],
+        ];
     }
 
     /**

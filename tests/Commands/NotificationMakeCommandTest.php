@@ -15,4 +15,13 @@ class NotificationMakeCommandTest extends TestCase
         $this->artisan('notifly:make:notification', $parameters)
             ->assertExitCode(0);
     }
+
+    /**
+     * @test
+     */
+    public function test_it_may_create_icon_class()
+    {
+        $this->artisan('notifly:make:notification FooNotification MyVerb --icon')
+            ->assertExitCode(0);
+    }
 }
