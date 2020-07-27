@@ -41,6 +41,7 @@ abstract class Icon
     }
 
     /**
+     * Get notification icon attributes
      * @return array
      */
     abstract public function toArray();
