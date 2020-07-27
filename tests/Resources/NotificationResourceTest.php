@@ -5,7 +5,7 @@ namespace Piscibus\Notifly\Tests\Resources;
 use Piscibus\Notifly\Models\Notification;
 use Piscibus\Notifly\Models\NotificationActor;
 use Piscibus\Notifly\Models\ReadNotification;
-use Piscibus\Notifly\Resources\NotificationJsonResource;
+use Piscibus\Notifly\Resources\JsonNotifications;
 use Piscibus\Notifly\Tests\TestCase;
 use Piscibus\Notifly\Tests\TestMocks\Models\User;
 
@@ -31,7 +31,7 @@ class NotificationResourceTest extends TestCase
             ]);
         });
         $notifications = $user->jsonableNotifications;
-        $response = NotificationJsonResource::collection($notifications)->response()->getData();
+        $response = JsonNotifications::collection($notifications)->response()->getData();
         $item = (array)$response->data[0];
         $keys = [
             'id',
@@ -64,7 +64,7 @@ class NotificationResourceTest extends TestCase
             ]);
         });
         $notifications = $user->jsonableReadNotifications;
-        $response = NotificationJsonResource::collection($notifications)->response()->getData();
+        $response = JsonNotifications::collection($notifications)->response()->getData();
         $item = (array)$response->data[0];
         $keys = [
             'id',

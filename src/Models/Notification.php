@@ -8,11 +8,10 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
-use Piscibus\Notifly\Contracts\Morphable as Entity;
-use Piscibus\Notifly\Contracts\NotiflyNotificationContract;
-use Piscibus\Notifly\Contracts\Transformable;
-use Piscibus\Notifly\Notifications\Icon;
-use Piscibus\Notifly\Traits\Findable;
+use Piscibus\Notifly\Contracts\MorphableInterface as Entity;
+use Piscibus\Notifly\Contracts\NotiflyNotificationInterface;
+use Piscibus\Notifly\Contracts\TransformableInterface;
+use Piscibus\Notifly\Traits\NotificationModelTrait;
 use RuntimeException;
 
 /**
@@ -38,7 +37,7 @@ use RuntimeException;
  */
 class Notification extends Model
 {
-    use Findable;
+    use NotificationModelTrait;
 
     /**
      * @var bool
@@ -57,10 +56,10 @@ class Notification extends Model
 
     /**
      * @param Entity $owner
-     * @param NotiflyNotificationContract $notification
+     * @param NotiflyNotificationInterface $notification
      * @return static
      */
-    public static function init(Entity $owner, NotiflyNotificationContract $notification): self
+    public static function init(Entity $owner, NotiflyNotificationInterface $notification): self
     {
         $item = new self();
         $item->id = $notification->getId();
@@ -94,10 +93,10 @@ class Notification extends Model
     }
 
     /**
-     * @param Transformable $actor
+     * @param TransformableInterface $actor
      * @return NotificationActor
      */
-    public function addActor(Transformable $actor): NotificationActor
+    public function addActor(TransformableInterface $actor): NotificationActor
     {
         $attributes = [
             'actor_type' => $actor->getType(),
@@ -110,43 +109,10 @@ class Notification extends Model
     }
 
     /**
-     * Get notification actors
-     */
-    public function actors()
-    {
-        return $this->hasMany(NotificationActor::class)
-            ->orderBy('updated_at', 'DESC');
-    }
-
-    /**
-     * @return mixed
-     */
-    public function jsonableActors()
-    {
-        return $this->actors()->with('actor');
-    }
-
-    /**
-     * Get the notification object
-     */
-    public function object()
-    {
-        return $this->morphTo('object');
-    }
-
-    /**
-     * Get the notification target
-     */
-    public function target()
-    {
-        return $this->morphTo('target');
-    }
-
-    /**
-     * @param Transformable $actor
+     * @param TransformableInterface $actor
      * @return NotificationActor
      */
-    private function attachActor(Transformable $actor): NotificationActor
+    private function attachActor(TransformableInterface $actor): NotificationActor
     {
         $attributes = ['actor_type' => $actor->getType(), 'actor_id' => $actor->getId()];
 
@@ -197,14 +163,6 @@ class Notification extends Model
     }
 
     /**
-     * @return Carbon|null
-     */
-    public function getSeenAt(): ?Carbon
-    {
-        return $this->seen_at;
-    }
-
-    /**
      * @return ReadNotification
      */
     public function markAsRead(): ReadNotification
@@ -218,78 +176,6 @@ class Notification extends Model
         }
 
         return ReadNotification::fromNotification($this);
-    }
-
-    /**
-     * @return string
-     */
-    public function getId(): string
-    {
-        return $this->id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getVerb(): string
-    {
-        return $this->verb;
-    }
-
-    /**
-     * @return Carbon
-     */
-    public function getTime(): Carbon
-    {
-        return $this->updated_at;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getObject()
-    {
-        return $this->object;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTarget()
-    {
-        return $this->target;
-    }
-
-    /**
-     * @return Collection
-     */
-    public function getTrimmedActors(): Collection
-    {
-        return $this->jsonableActors;
-    }
-
-    /**
-     * @return int
-     */
-    public function getTrimmed(): int
-    {
-        return $this->trimmed_actors;
-    }
-
-    /**
-     * @return array
-     * @psalm-suppress UndefinedClass
-     */
-    public function getIcon(): array
-    {
-        $iconClass = config("notifly.icons.$this->verb");
-        if (is_null($iconClass)) {
-            return [];
-        }
-        /** @var Icon $icon */
-        $icon = new $iconClass($this->jsonableActors, $this->object, $this->target);
-
-        return $icon->toArray();
     }
 
     /**

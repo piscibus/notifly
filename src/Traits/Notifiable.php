@@ -11,5 +11,5 @@ use Illuminate\Notifications\RoutesNotifications;
  */
 trait Notifiable
 {
-    use HasDatabaseNotifications, RoutesNotifications, HasJsonableNotifications;
+    use HasDatabaseNotifications, RoutesNotifications, HasJsonableNotifications, Notifly;
 }

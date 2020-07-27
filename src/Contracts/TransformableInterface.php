@@ -6,10 +6,10 @@ namespace Piscibus\Notifly\Contracts;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * Interface Transformable
+ * Interface TransformableInterface
  * @package Piscibus\Notifly\Contracts
  */
-interface Transformable extends Morphable
+interface TransformableInterface extends MorphableInterface
 {
     /**
      * @return JsonResource

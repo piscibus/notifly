@@ -4,12 +4,12 @@
 namespace Piscibus\Notifly\Tests\TestMocks\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Piscibus\Notifly\Contracts\Transformable;
-use Piscibus\Notifly\Traits\Morphable;
+use Piscibus\Notifly\Contracts\TransformableInterface;
+use Piscibus\Notifly\Traits\Notifly;
 
-class Post extends Model implements Transformable
+class Post extends Model implements TransformableInterface
 {
-    use Morphable;
+    use Notifly;
 
     protected $table = 'target_examples';
 }

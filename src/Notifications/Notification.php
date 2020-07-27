@@ -5,13 +5,17 @@ namespace Piscibus\Notifly\Notifications;
 
 use Illuminate\Notifications\Notification as BaseNotification;
 use Illuminate\Support\Str;
-use Piscibus\Notifly\Contracts\NotiflyNotificationContract;
-use Piscibus\Notifly\Contracts\Transformable;
+use Piscibus\Notifly\Contracts\NotiflyNotificationInterface;
+use Piscibus\Notifly\Contracts\TransformableInterface;
 
-abstract class Notification extends BaseNotification implements NotiflyNotificationContract
+/**
+ * Class Notification
+ * @package Piscibus\Notifly\Notifications
+ */
+abstract class Notification extends BaseNotification implements NotiflyNotificationInterface
 {
     /**
-     * @var Transformable
+     * @var TransformableInterface
      */
     protected $actor;
 
@@ -21,23 +25,26 @@ abstract class Notification extends BaseNotification implements NotiflyNotificat
     protected $verb = '';
 
     /**
-     * @var Transformable
+     * @var TransformableInterface
      */
     protected $object;
 
     /**
-     * @var Transformable
+     * @var TransformableInterface
      */
     protected $target;
 
     /**
      * CommentNotification constructor.
-     * @param Transformable $actor
-     * @param Transformable $object
-     * @param Transformable $target
+     * @param TransformableInterface $actor
+     * @param TransformableInterface $object
+     * @param TransformableInterface $target
      */
-    public function __construct(Transformable $actor, Transformable $object, Transformable $target)
-    {
+    public function __construct(
+        TransformableInterface $actor,
+        TransformableInterface $object,
+        TransformableInterface $target
+    ) {
         $this->id = (string)Str::orderedUuid();
         $this->actor = $actor;
         $this->object = $object;
@@ -62,26 +69,25 @@ abstract class Notification extends BaseNotification implements NotiflyNotificat
     }
 
     /**
-     * @return Transformable
+     * @return TransformableInterface
      */
-    public function getActor(): Transformable
+    public function getActor(): TransformableInterface
     {
         return $this->actor;
     }
 
     /**
-     * @return Transformable
+     * @return TransformableInterface
      */
-    public function getTarget(): Transformable
+    public function getTarget(): TransformableInterface
     {
         return $this->target;
     }
-
-
+    
     /**
-     * @return Transformable
+     * @return TransformableInterface
      */
-    public function getObject(): Transformable
+    public function getObject(): TransformableInterface
     {
         return $this->object;
     }

@@ -3,21 +3,21 @@
 
 namespace Piscibus\Notifly\Traits;
 
-use Piscibus\Notifly\Contracts\Morphable as Entity;
-use Piscibus\Notifly\Contracts\NotiflyNotificationContract;
+use Piscibus\Notifly\Contracts\MorphableInterface as Entity;
+use Piscibus\Notifly\Contracts\NotiflyNotificationInterface;
 
 /**
- * Trait Findable
+ * Trait FindableTrait
  * @package Piscibus\Notifly\Traits
  */
-trait Findable
+trait FindableTrait
 {
     /**
      * @param Entity $owner
-     * @param NotiflyNotificationContract $notification
+     * @param NotiflyNotificationInterface $notification
      * @return static|null
      */
-    public static function findByNotification(Entity $owner, NotiflyNotificationContract $notification): ?self
+    public static function findByNotification(Entity $owner, NotiflyNotificationInterface $notification): ?self
     {
         $model = new static();
         $attributes = [

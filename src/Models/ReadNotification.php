@@ -7,17 +7,32 @@ use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
-use Piscibus\Notifly\Notifications\Icon;
-use Piscibus\Notifly\Traits\Findable;
+use Piscibus\Notifly\Traits\NotificationModelTrait;
 use RuntimeException;
 
 /**
  * Class ReadNotification
+ * @property string id
+ * @property string verb
+ * @property string owner_type
+ * @property string owner_id
+ * @property string object_type
+ * @property string object_id
+ * @property string target_type
+ * @property string target_id
+ * @property int trimmed_actors
+ * @property Carbon created_at
+ * @property Carbon updated_at
+ * @property Carbon seen_at
+ * @property mixed object
+ * @property mixed target
+ * @property Collection jsonableActors
+ * @property Collection actors
  * @package Piscibus\Notifly\Models
  */
 class ReadNotification extends Model
 {
-    use Findable;
+    use NotificationModelTrait;
 
     /**
      * @var bool
@@ -49,38 +64,6 @@ class ReadNotification extends Model
         return $item;
     }
 
-    /**
-     * Get notification actors
-     */
-    public function actors()
-    {
-        return $this->hasMany(NotificationActor::class, 'notification_id')
-            ->orderBy('updated_at', 'DESC');
-    }
-
-    /**
-     * @return mixed
-     */
-    public function jsonableActors()
-    {
-        return $this->actors()->with('actor');
-    }
-
-    /**
-     * Get the notification object
-     */
-    public function object()
-    {
-        return $this->morphTo('object');
-    }
-
-    /**
-     * Get the notification target
-     */
-    public function target()
-    {
-        return $this->morphTo('target');
-    }
 
     /**
      * @return Notification
@@ -96,77 +79,5 @@ class ReadNotification extends Model
         }
 
         return Notification::fromReadNotification($this);
-    }
-
-    /**
-     * @return string
-     */
-    public function getId(): string
-    {
-        return $this->id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getVerb(): string
-    {
-        return $this->verb;
-    }
-
-    /**
-     * @return Carbon
-     */
-    public function getTime(): Carbon
-    {
-        return $this->updated_at;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getObject()
-    {
-        return $this->object;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTarget()
-    {
-        return $this->target;
-    }
-
-    /**
-     * @return Collection
-     */
-    public function getTrimmedActors(): Collection
-    {
-        return $this->jsonableActors;
-    }
-
-    /**
-     * @return int
-     */
-    public function getTrimmed(): int
-    {
-        return $this->trimmed_actors;
-    }
-
-    /**
-     * @return array
-     * @psalm-suppress UndefinedClass
-     */
-    public function getIcon(): array
-    {
-        $iconClass = config("notifly.icons.$this->verb");
-        if (is_null($iconClass)) {
-            return [];
-        }
-        /** @var Icon $icon */
-        $icon = new $iconClass($this->jsonableActors, $this->object, $this->target);
-
-        return $icon->toArray();
     }
 }

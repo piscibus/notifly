@@ -4,10 +4,10 @@
 namespace Piscibus\Notifly\Contracts;
 
 /**
- * Interface Morphable
+ * Interface MorphableInterface
  * @package Piscibus\Notifly\Contracts
  */
-interface Morphable
+interface MorphableInterface
 {
     /**
      * @return string

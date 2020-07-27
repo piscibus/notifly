@@ -3,9 +3,9 @@
 
 namespace Piscibus\Notifly\Channels;
 
-use Piscibus\Notifly\Contracts\Morphable as Notifiable;
-use Piscibus\Notifly\Contracts\NotiflyChannelContract;
-use Piscibus\Notifly\Contracts\NotiflyNotificationContract as Notification;
+use Piscibus\Notifly\Contracts\MorphableInterface as Notifiable;
+use Piscibus\Notifly\Contracts\NotiflyChannelInterface;
+use Piscibus\Notifly\Contracts\NotiflyNotificationInterface as Notification;
 use Piscibus\Notifly\Models\Notification as NotificationModel;
 use Piscibus\Notifly\Models\ReadNotification;
 
@@ -13,7 +13,7 @@ use Piscibus\Notifly\Models\ReadNotification;
  * Class NotiflyChannel
  * @package Piscibus\Notifly\Channels
  */
-class NotiflyChannel implements NotiflyChannelContract
+class NotiflyChannel implements NotiflyChannelInterface
 {
     /**
      * @inheritDoc

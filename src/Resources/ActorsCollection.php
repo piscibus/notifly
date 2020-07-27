@@ -5,7 +5,7 @@ namespace Piscibus\Notifly\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use Piscibus\Notifly\Contracts\Transformable;
+use Piscibus\Notifly\Contracts\TransformableInterface;
 use Piscibus\Notifly\Models\NotificationActor;
 
 /**
@@ -23,7 +23,7 @@ class ActorsCollection extends ResourceCollection
         $data = [];
         /** @var NotificationActor $actor */
         foreach ($this->collection as $actor) {
-            /** @var Transformable $morphedActor */
+            /** @var TransformableInterface $morphedActor */
             $morphedActor = $actor->actor;
             $data[] = $morphedActor->getTransformer();
         }

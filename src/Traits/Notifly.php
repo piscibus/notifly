@@ -6,7 +6,7 @@ namespace Piscibus\Notifly\Traits;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Piscibus\Notifly\Resources\CommonResource;
 
-trait Morphable
+trait Notifly
 {
     /**
      * @inheritDoc

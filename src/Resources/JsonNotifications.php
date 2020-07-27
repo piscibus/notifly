@@ -7,10 +7,10 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * Class NotificationJsonResource
+ * Class JsonNotifications
  * @package Piscibus\Notifly\Resources
  */
-class NotificationJsonResource extends JsonResource
+class JsonNotifications extends JsonResource
 {
     /**
      * @param Request $request

@@ -4,7 +4,7 @@
 namespace Piscibus\Notifly\Notifications;
 
 use Illuminate\Support\Collection;
-use Piscibus\Notifly\Contracts\Morphable;
+use Piscibus\Notifly\Contracts\MorphableInterface;
 
 /**
  * Class Icon
@@ -18,22 +18,22 @@ abstract class Icon
     protected $actors;
 
     /**
-     * @var Morphable
+     * @var MorphableInterface
      */
     protected $object;
 
     /**
-     * @var Morphable
+     * @var MorphableInterface
      */
     protected $target;
 
     /**
      * Icon constructor.
      * @param Collection $actors
-     * @param Morphable $object
-     * @param Morphable $target
+     * @param MorphableInterface $object
+     * @param MorphableInterface $target
      */
-    public function __construct(Collection $actors, Morphable $object, Morphable $target)
+    public function __construct(Collection $actors, MorphableInterface $object, MorphableInterface $target)
     {
         $this->actors = $actors;
         $this->object = $object;
