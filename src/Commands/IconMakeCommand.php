@@ -40,6 +40,6 @@ class IconMakeCommand extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace . '\Notifications\Icons';
+        return $rootNamespace . '\Icons';
     }
 }
