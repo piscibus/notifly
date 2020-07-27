@@ -1,0 +1,23 @@
+<?php
+
+
+namespace DummyNamespace;
+
+use Piscibus\Notifly\Channels\NotiflyChannel;
+use Piscibus\Notifly\Notifications\Notification;
+
+class DummyClass extends Notification
+{
+    /**
+     * @var string
+     */
+    protected $verb = 'DummyVerb';
+
+    /**
+     * @return array
+     */
+    public function via(): array
+    {
+        return [NotiflyChannel::class];
+    }
+}

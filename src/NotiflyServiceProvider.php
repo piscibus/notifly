@@ -3,6 +3,7 @@
 namespace Piscibus\Notifly;
 
 use Illuminate\Support\ServiceProvider;
+use Piscibus\Notifly\Commands\NotificationMakeCommand;
 
 class NotiflyServiceProvider extends ServiceProvider
 {
@@ -60,7 +61,7 @@ class NotiflyServiceProvider extends ServiceProvider
     private function bootCommands(): void
     {
         $this->commands([
-
+            NotificationMakeCommand::class,
         ]);
     }
 }

@@ -7,6 +7,10 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Piscibus\Notifly\Notifications\Icon;
 
+/**
+ * Trait HasNotificationGetters
+ * @package Piscibus\Notifly\Traits
+ */
 trait HasNotificationGetters
 {
 

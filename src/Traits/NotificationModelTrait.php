@@ -5,6 +5,10 @@ namespace Piscibus\Notifly\Traits;
 
 use Piscibus\Notifly\Models\NotificationActor;
 
+/**
+ * Trait NotificationModelTrait
+ * @package Piscibus\Notifly\Traits
+ */
 trait NotificationModelTrait
 {
     use FindableTrait, HasNotificationGetters;
