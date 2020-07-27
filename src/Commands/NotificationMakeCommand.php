@@ -54,6 +54,7 @@ class NotificationMakeCommand extends GeneratorCommand
     protected function buildClass($name)
     {
         $verb = $this->getVerb($name);
+
         return str_replace(
             'DummyVerb',
             $verb,
@@ -69,6 +70,7 @@ class NotificationMakeCommand extends GeneratorCommand
         $arguments = [
             ['verb', InputArgument::OPTIONAL, 'The name of the notification verb'],
         ];
+
         return array_merge(parent::getArguments(), $arguments);
     }
 
@@ -79,6 +81,7 @@ class NotificationMakeCommand extends GeneratorCommand
     protected function getVerb($name)
     {
         $verb = $this->argument('verb');
+
         return $verb ? trim($verb) : Str::before(Str::snake(class_basename($name)), '_');
     }
 }
