@@ -1,6 +1,6 @@
 # Notifly
 Notifly allows aggregating notification actors like Facebook, Twitter, Instagram and etc -- (John Doe, Jane Doe and 8
- others reacted to your photo.) A notification consists of and `actor`, a `verb`, an `object` and a `target`. It
+ others reacted to your photo.) A notification consists of an `actor`, a `verb`, an `object` and a `target`. It
   tells the story of a person performing an action on or with an object.
  
  # Creating Notifications
