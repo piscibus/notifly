@@ -1,9 +1,40 @@
 # Notifly
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/piscibus/notifly.svg?style=flat-square)](https://packagist.org/packages/piscibus/notifly)
+[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/piscibus/notifly/Tests?label=tests)](https://github.com/piscibus/notifly/actions?query=workflow%3ATests+branch%3Amaster)
+[![Total Downloads](https://img.shields.io/packagist/dt/piscibus/notifly.svg?style=flat-square)](https://packagist.org/packages/piscibus/notifly)
+
 Notifly allows aggregating notification actors like Facebook, Twitter, Instagram and etc -- (`John Doe, Jane Doe and 8
  others reacted to your photo.`) A notification consists of an `actor`, a `verb`, an `object` and a `target`. It
   tells the story of a person performing an action on or with an object.
  
- # Creating Notifications
+ ## Installation
+ You can install the package via composer:
+ ```bash
+ composer require piscibus/notifly
+ ```
+ 
+ You can publish and run the migrations with:
+ ```bash
+ php artisan vendor:publish --provider="Piscibus\Notifly\NotiflyServiceProvider" --tag="migrations"
+ php artisan migrate
+ ```
+ 
+ You can publish the config file with:
+ ```bash
+ php artisan vendor:publish --provider="Piscibus\Notifly\NotiflyServiceProvider" --tag="config"
+ ```
+ 
+ This is the contents of the published config file:
+ ```php
+return [
+    'max_actors_count' => 2,
+    'icons' => [
+//        'verb' => VerbIcon::class
+    ],
+];
+ ```
+ 
+ ## Creating Notifications
  In Notifly, the same as In Laravel, each notification is represented by a single class (typically stored in the `app/Notifications` directory). you can create a notification class by running the `notifly:make:notification` Artisan
   command.
   
@@ -14,7 +45,7 @@ Notifly allows aggregating notification actors like Facebook, Twitter, Instagram
     can append any required channels. The `NotiflyChannel` replaces Laravel's database channel, but any other message
      building channels such as `toMail` are supported the same as expected in a normal notification class. 
      
-# Sending Notifications
+## Sending Notifications
 
 The Notified user model must implement the `TransformableInterface`, don't worry about the required methods, they are
  implemented in the `Notifiable` from **Piscibus** not ~~Laravel~~. Let's explore a `User` model example.
@@ -63,7 +94,7 @@ class Comment extends Model implements TransformableInterface
 Since the `User` model, may represent an actor and a notifiable in the same time, the required methods are provided
  by a `Notifibale` trait.
  
- ## tl;dr
+ ### tl;dr
  - All models used in notifications should implement `\Piscibus\Notifly\Contracts\TransformableInterface`
  - The Notified model -- (`User`) uses the `\Piscibus\Notifly\Traits\Notifiable` trait.
  - Any other models -- (`Comment`, `Post`) uses `\Piscibus\Notifly\Traits\Notifly` trait.
@@ -85,8 +116,7 @@ class CommentNotification extends Notification
 }
 ```
 A Notification usually has an icon, the icon is represented by an array in the JSON response. To customize a
- notification icon, you need to create an icon class, and register this icon class in the configuration file `configs
- /notifly.php`. To generate an icon class run the `notifly:make:icon` Artisan command.
+ notification icon, you need to create an icon class, and register this icon class in the configuration file `configs/notifly.php`. To generate an icon class run the `notifly:make:icon` Artisan command.
  
  `php artisan notifly:make:icon CommentNotificationIcon`
  
@@ -133,7 +163,7 @@ Within the `toArray` method you can access all entities of the notification.
 
 Use them to customize the notification icon.
 
-# Accessing The Notifications
+## Accessing The Notifications
 
 Once notifications are stored in the database, you need a convenient way to access them from your notifiable entities
 . The `\Piscibus\Notifly\Traits\Notifiable` includes a `notifications` Eloquent relationship that returns the "un-read"
@@ -169,7 +199,7 @@ foreach ($user->unreadNotifications as $notification) {
 }
 ```
 
-# Marking Notifications As Seen
+## Marking Notifications As Seen
 
 Typically, you will want to mark a notification as "seen" when a user retrieves the notification list. The `\Piscibus\Notifly\Traits\Notifiable` provides a `markAsSeen` method, wich updates the `seen_at` column on the notification's database record:
 ```php
@@ -195,7 +225,7 @@ You may `delete` the notifications to remove them from the table entirley:
 $user->notifications()->delete();
 ```
 
-# Marking Notifications As Read
+## Marking Notifications As Read
 Typically, you will want to mark a notification as "read" when a user views it. You may use the `markAsRead` method, which deletes this notification entry and creates a new entry in the `read_notification`table:
 ```php
 $user = App\User::find(1);
@@ -211,7 +241,7 @@ foreach($user->readNotifications as $notification) {
 }
 ```
 
-# Notifications In A JSON Response
+## Notifications JSON Response
 Typically, you will want to provied a JSON response of a notifiable notifications. You may use the `\Piscibus\Notifly\Resources\JsonNotifications` JSON resource.
 To avoid "N+1" queriers, the `\Piscibus\Notifly\Traits\Notifiable` has a `jsonableNotifications` and `jsonableReadNotifications` relationships which eagrly load the required relations:
 ```php
@@ -256,7 +286,7 @@ A notification JSON appears as follows:
 }
 ```
 
-# Customizing The Notification entities JSON
+## Customizing The Notification Entities JSON
 To customize a notification JSON, create an [Eloquent API Resource](https://laravel.com/docs/eloquent-resources), then override the `getTransformer` in the entity model class. In a `John commented on your post` case, the object is a `Comment` model, to customize its JSON:
 
 `php artisan make:resource Comment`
@@ -285,3 +315,21 @@ class Comment extends Model implements TransformableInterface
 ```
 
 For more information about [Eloquent API Resource](https://laravel.com/docs/eloquent-resources), check Laravel documentation.
+
+## Artisan Commands
+### Creating Notifications
+`notifly:make:notification`
+- **Description**: Create a new notification class.
+- **Usage**: `notifly:make:notification [options] [--] <name> [<verb>]`
+- **Arguments**: 
+   * `name`<sup>*</sup>: (required) The name of the notification class.
+   * `verb`: (Optional) The name of the notification verb.
+- **Options**:
+  * `-i`, `--icon`: Creates an icon class for the created notification class.
+ 
+ ### Creating Icons
+ `notifly:make:icon`
+ - **Description**: Create a new notification icon class.
+ - **Usage**: `notifly:make:icon <name>`
+ - **Arguments**: 
+   * `name`<sup>*</sup>: (required) The name of the notification icon class.
