@@ -5,9 +5,9 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /**
- * Class CreateNotiflyReadNotificationsTable
+ * Class CreateNotiflyReadNotificationTable
  */
-class CreateNotiflyReadNotificationsTable extends Migration
+class CreateNotiflyReadNotificationTable extends Migration
 {
     /**
      * Run the migrations
@@ -22,7 +22,7 @@ class CreateNotiflyReadNotificationsTable extends Migration
             $table->uuidMorphs('target');
             $table->unsignedInteger('trimmed_actors');
             $table->timestamps();
-            $table->timestamp('seen_at');
+            $table->timestamp('seen_at')->nullable();
         });
     }
 
