@@ -13,7 +13,7 @@ class NotiflyServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->publishConfigs();
 
-            $this->publishViews();
+//            $this->publishViews();
 
             $this->publishMigrations();
 
