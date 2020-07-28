@@ -1,11 +1,10 @@
 # Notifly
-Notifly allows aggregating notification actors like Facebook, Twitter, Instagram and etc -- (John Doe, Jane Doe and 8
- others reacted to your photo.) A notification consists of an `actor`, a `verb`, an `object` and a `target`. It
+Notifly allows aggregating notification actors like Facebook, Twitter, Instagram and etc -- (`John Doe, Jane Doe and 8
+ others reacted to your photo.`) A notification consists of an `actor`, a `verb`, an `object` and a `target`. It
   tells the story of a person performing an action on or with an object.
  
  # Creating Notifications
- In Notifly, the same as In Laravel, each notification is represented by a single class (typically stored in the `app
- /Notifications` directory). you can create a notification class by running the `notifly:make:notification` Artisan
+ In Notifly, the same as In Laravel, each notification is represented by a single class (typically stored in the `app/Notifications` directory). you can create a notification class by running the `notifly:make:notification` Artisan
   command.
   
   `php artisan notifly:make:notification CommentNotification`
@@ -46,9 +45,7 @@ $user->notify(new CommentNotification($actor, $object, $target));
 In the previous example, the `$actor` is the user who commented on the `$user`'s post. The `$object` is the comment
  itself. Finally, the `$target` is the post the `$actor` commented on.
  
- All those required entities (`$actor`, `$object` and `$target`) must implement the `TransformableInterface`, and again dont
- ' worry
-  about the required
+ All those required entities (`$actor`, `$object` and `$target`) must implement the `TransformableInterface`, and again don't worry about the required
   methods, they are implemented in `Notifly` Trait.
   
 ```php
@@ -172,3 +169,119 @@ foreach ($user->unreadNotifications as $notification) {
 }
 ```
 
+# Marking Notifications As Seen
+
+Typically, you will want to mark a notification as "seen" when a user retrieves the notification list. The `\Piscibus\Notifly\Traits\Notifiable` provides a `markAsSeen` method, wich updates the `seen_at` column on the notification's database record:
+```php
+$user = App\User::find(1);
+foreach($user->unseenNotifications as $notificaion) {
+    $notification->markAsSeen();
+}
+```
+
+However, instead of looping throug each notification, you may use the `markAsSeen` method directoy on a collection of notifications.
+```php
+$user->unseenNotifications->markAsSeen();
+```
+
+You may also use a mass-update query to mark all the notifications as seen without retrieving them from the database:
+```php
+$user = App\User::find(1);
+$user->unseenNotifications()->update(['seen_at' => now()]);
+```
+
+You may `delete` the notifications to remove them from the table entirley:
+```php
+$user->notifications()->delete();
+```
+
+# Marking Notifications As Read
+Typically, you will want to mark a notification as "read" when a user views it. You may use the `markAsRead` method, which deletes this notification entry and creates a new entry in the `read_notification`table:
+```php
+$user = App\User::find(1);
+foreach($user->notifications as $notification) {
+    $readNotification = $notification->markAsRead();
+}
+```
+If you want to mark a read-notification as "unread", you may use `markAsUnRead` method, which reverses the previouls process of marking the notification as read.
+```php
+$user = App\User::find(1);
+foreach($user->readNotifications as $notification) {
+    $notification->markAsUnRead();
+}
+```
+
+# Notifications In A JSON Response
+Typically, you will want to provied a JSON response of a notifiable notifications. You may use the `\Piscibus\Notifly\Resources\JsonNotifications` JSON resource.
+To avoid "N+1" queriers, the `\Piscibus\Notifly\Traits\Notifiable` has a `jsonableNotifications` and `jsonableReadNotifications` relationships which eagrly load the required relations:
+```php
+Route::get('/notifications', function(){
+    $user = App\User::find(1);
+    $notifications = $user->jsonableNotifications;
+    return JsonNotifications::collection($notifications);
+})
+```
+
+A notification JSON appears as follows:
+```Javascript
+{
+    "id": "9122a3cb-b4e3-352a-a1ab-087e259403af",
+    "verb": "comment",
+    "time": "2020-07-26T16:07:10.000000Z",
+    "object" : {
+        "id" : 7,
+        //...
+    },
+    "target": {
+        "id": 9
+    },
+    "actors": {
+        "data": [
+            {
+                "id": 1990,
+                //...
+            },
+            {
+                "id": 1995,
+                //...
+            }
+        ],
+        "trimmed": 8
+    },
+    "icon": {
+        "width": 500,
+        "height": 500,
+        "uri": "https://example.com/path/to/image.jpg"
+    }
+}
+```
+
+# Customizing The Notification entities JSON
+To customize a notification JSON, create an [Eloquent API Resource](https://laravel.com/docs/eloquent-resources), then override the `getTransformer` in the entity model class. In a `John commented on your post` case, the object is a `Comment` model, to customize its JSON:
+
+`php artisan make:resource Comment`
+
+```php
+<?php
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+use Piscibus\Notifly\Contracts\TransformableInterface;
+use Piscibus\Notifly\Traits\Notifiable;
+use App\Http\Resources\Comment as CommentResource;
+
+class Comment extends Model implements TransformableInterface
+{
+     use Notifiable;
+    
+    /**
+    * Gets the Eloquent API Resource
+    **/
+    public function getTransformer(): JsonResource
+    {
+        return new CommentResource($this);
+    }
+}
+```
+
+For more information about [Eloquent API Resource](https://laravel.com/docs/eloquent-resources), check Laravel documentation.
